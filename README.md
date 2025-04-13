@@ -70,6 +70,7 @@ Game Hub is a console-based Go application that allows users to play various min
 - `app/`: Main menu logic.
 - `games/`: Folder containing games.
   - `game_template/`: Template for new games.
+- `utils`: Common utilities.
 - `main.go`: Entry point.
 
 ## Localization
