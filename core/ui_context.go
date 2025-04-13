@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"game_hub/utils"
 	"strings"
 )
 
@@ -17,15 +18,18 @@ type UiContext struct {
 	StateLocalizer      *StateLocalizer
 }
 
+func (ui *UiContext) DisplayText(txt string) {
+	ui.Console.Write(utils.WrapText(txt, 80))
+}
 func (ui *UiContext) DisplayError(err error) {
 	msg := ui.ErrHandler.Handle(err)
 	if msg != "" {
-		ui.Console.Write(fmt.Sprintf("%s\r\n", msg))
+		ui.DisplayText(fmt.Sprintf("%s\r\n", msg))
 	}
 }
 func (ui *UiContext) DisplayMessage() {
 	if ui.Msg != "" {
-		ui.Console.Write(fmt.Sprintf("%s", ui.Msg))
+		ui.DisplayText(fmt.Sprintf("%s", ui.Msg))
 		ui.Msg = ""
 	}
 }

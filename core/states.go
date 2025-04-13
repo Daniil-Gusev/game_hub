@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"game_hub/utils"
 	"os"
 	"sort"
 )
@@ -51,7 +52,7 @@ func (g *InitGameState) Init(ctx *GameContext, ui *UiContext) (State, error) {
 	return g, nil
 }
 func (g *InitGameState) Display(ctx *GameContext, ui *UiContext) {
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "game_welcome"), ui.GetOptionalLocalizedMsg(ui.AppLocalizer, g.Game.GetId(), "name")) + "\r\n")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "game_welcome"), ui.GetOptionalLocalizedMsg(ui.AppLocalizer, g.Game.GetId(), "name")) + "\r\n")
 }
 func (g *InitGameState) Handle(ctx *GameContext, ui *UiContext, input string) (State, error) {
 	ctx.Game = g.Game.CreateNew()
@@ -68,7 +69,7 @@ func (e *ExitState) Id() string {
 	return "exit"
 }
 func (e *ExitState) Display(_ *GameContext, ui *UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(e, "exit") + "\r\n")
+	ui.DisplayText(ui.GetLocalizedStateMsg(e, "exit") + "\r\n")
 }
 func (e *ExitState) Handle(ctx *GameContext, _ *UiContext, _ string) (State, error) {
 	ctx.AppIsRunning = false
@@ -105,8 +106,8 @@ func (d *ConfirmationDialogState) Id() string {
 	return "confirmation_dialog"
 }
 func (d *ConfirmationDialogState) Display(_ *GameContext, ui *UiContext) {
-	ui.Console.Write(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
-	ui.Console.Write("> ")
+	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
+	ui.DisplayText("> ")
 }
 func (d *ConfirmationDialogState) Handle(ctx *GameContext, ui *UiContext, input string) (State, error) {
 	ui.Msg = ui.GetLocalizedStateMsg(d, "confirmation_prompt")
@@ -150,12 +151,12 @@ func (m *MenuState) Display(ctx *GameContext, ui *UiContext) {
 	for _, option := range m.Options {
 		desc := ui.GetLocalizedStateMsg(m.ParentState, option.Description)
 		if option.Params != nil {
-			desc = SubstituteParams(desc, option.Params())
+			desc = utils.SubstituteParams(desc, option.Params())
 		}
-		ui.Console.Write(fmt.Sprintf("%d. %s\r\n", option.Id, desc))
+		ui.DisplayText(fmt.Sprintf("%d. %s\r\n", option.Id, desc))
 	}
-	ui.Console.Write(ui.GetLocalizedStateMsg(m, "make_your_choice") + "\r\n")
-	ui.Console.Write("> ")
+	ui.DisplayText(ui.GetLocalizedStateMsg(m, "make_your_choice") + "\r\n")
+	ui.DisplayText("> ")
 }
 func (m *MenuState) Handle(ctx *GameContext, ui *UiContext, input string) (State, error) {
 	num, err := ui.Validator.ParseInt(input)
@@ -171,7 +172,7 @@ func (m *MenuState) Handle(ctx *GameContext, ui *UiContext, input string) (State
 }
 func (m *MenuState) ShowGreeting(ctx *GameContext, ui *UiContext) {
 	if m.Greeting != "" {
-		ui.Console.Write(fmt.Sprintf("%s\r\n", m.Greeting))
+		ui.DisplayText(fmt.Sprintf("%s\r\n", m.Greeting))
 		m.Greeting = ""
 	}
 }

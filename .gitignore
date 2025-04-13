@@ -24,7 +24,7 @@ temp/
 vendor/
 
 # macOS
-.DS_Store
+.*DS_Store
 
 # release foulder
 release/

@@ -36,16 +36,16 @@ func (c *HelpCommand) Execute(ctx *GameContext, ui *UiContext, args []string) (S
 	}
 	desc := ui.GetLocalizedStateDescription(state)
 	if desc == "" {
-		ui.Console.Write(ui.GetLocalizedMsg(ui.AppLocalizer, "help_not_found") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedMsg(ui.AppLocalizer, "help_not_found") + "\r\n")
 	} else {
-		ui.Console.Write(fmt.Sprintf("%s\r\n", desc))
+		ui.DisplayText(fmt.Sprintf("%s\r\n", desc))
 	}
-	ui.Console.Write(ui.GetLocalizedMsg(ui.AppLocalizer, "available_commands") + "\r\n")
+	ui.DisplayText(ui.GetLocalizedMsg(ui.AppLocalizer, "available_commands") + "\r\n")
 	for _, cmd := range ui.CommandRegistry.GetLocalCommands() {
-		ui.Console.Write(fmt.Sprintf("%s: (%s).\r\n%s\r\n", ui.GetLocalizedCmdName(cmd), strings.Join(ui.GetLocalizedCmdAliases(cmd), ", "), ui.GetLocalizedCmdDescription(cmd)))
+		ui.DisplayText(fmt.Sprintf("%s: (%s).\r\n%s\r\n", ui.GetLocalizedCmdName(cmd), strings.Join(ui.GetLocalizedCmdAliases(cmd), ", "), ui.GetLocalizedCmdDescription(cmd)))
 	}
 	for _, cmd := range ui.CommandRegistry.GetGlobalCommands() {
-		ui.Console.Write(fmt.Sprintf("%s: (%s).\r\n%s\r\n", ui.GetLocalizedCmdName(cmd), strings.Join(ui.GetLocalizedCmdAliases(cmd), ", "), ui.GetLocalizedCmdDescription(cmd)))
+		ui.DisplayText(fmt.Sprintf("%s: (%s).\r\n%s\r\n", ui.GetLocalizedCmdName(cmd), strings.Join(ui.GetLocalizedCmdAliases(cmd), ", "), ui.GetLocalizedCmdDescription(cmd)))
 	}
 	return state, nil
 }
@@ -81,7 +81,7 @@ func (c *VersionCommand) Id() string {
 func (c *VersionCommand) Execute(ctx *GameContext, ui *UiContext, args []string) (State, error) {
 	versionMsg := ui.GetLocalizedMsg(ui.AppLocalizer, "version_info")
 	versionMsg = fmt.Sprintf(versionMsg, Version, BuildTime)
-	ui.Console.Write(versionMsg + "\r\n")
+	ui.DisplayText(versionMsg + "\r\n")
 	state, err := ctx.GetCurrentState()
 	if err != nil {
 		return nil, err

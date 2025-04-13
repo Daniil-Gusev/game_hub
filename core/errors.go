@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"game_hub/utils"
 )
 
 type ErrorCode string
@@ -62,7 +63,7 @@ func (h *LocalizedErrorHandler) Handle(err error) string {
 			}
 			errMsg = msg
 		}
-		errMsg = SubstituteParams(errMsg, appErr.Details)
+		errMsg = utils.SubstituteParams(errMsg, appErr.Details)
 		var informationKey string
 		switch appErr.Code {
 		case ErrInternal:

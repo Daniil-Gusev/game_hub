@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"game_hub/core"
+	"game_hub/utils"
 )
 
 type GameSelectionMenuState struct {
@@ -34,17 +35,17 @@ func (s *GameSelectionMenuState) Init(ctx *core.GameContext, ui *core.UiContext)
 	return s, nil
 }
 func (s *GameSelectionMenuState) Display(_ *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "welcome") + "\r\n")
-	ui.Console.Write(fmt.Sprintf("0. %s\r\n", ui.GetLocalizedStateMsg(s, "exit_option")))
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "available_games") + "\r\n\r\n")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "welcome") + "\r\n")
+	ui.DisplayText(fmt.Sprintf("0. %s\r\n", ui.GetLocalizedStateMsg(s, "exit_option")))
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "available_games") + "\r\n\r\n")
 	for i, game := range s.AvailableGames {
 		name := ui.GetOptionalLocalizedMsg(ui.AppLocalizer, game.GetId(), "name")
 		desc := ui.GetOptionalLocalizedMsg(ui.AppLocalizer, game.GetId(), "description")
 		author := ui.GetOptionalLocalizedMsg(ui.AppLocalizer, game.GetId(), "author")
-		ui.Console.Write(fmt.Sprintf("%d. %s.\r\n%s\r\n%s: %s.\r\n\r\n", i+1, name, desc, core.Capitalize(ui.GetLocalizedMsg(ui.AppLocalizer, "author")), author))
+		ui.DisplayText(fmt.Sprintf("%d. %s.\r\n%s\r\n%s: %s.\r\n\r\n", i+1, name, desc, utils.Capitalize(ui.GetLocalizedMsg(ui.AppLocalizer, "author")), author))
 	}
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "make_your_choice") + "\r\n")
-	ui.Console.Write("> ")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "make_your_choice") + "\r\n")
+	ui.DisplayText("> ")
 }
 
 func (s *GameSelectionMenuState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {

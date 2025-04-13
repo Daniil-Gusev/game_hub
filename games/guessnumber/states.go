@@ -65,10 +65,10 @@ func (s *SelectMinNumberState) Id() string {
 	return "select_min_number"
 }
 func (s *SelectMinNumberState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
-	ui.Console.Write(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MinNumber))
-	ui.Console.Write("> ")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
+	ui.DisplayText(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MinNumber))
+	ui.DisplayText("> ")
 }
 func (s *SelectMinNumberState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.MinNumber, s.game.MinRangeNumber, s.game.MaxRangeNumber)
@@ -91,10 +91,10 @@ func (s *SelectMaxNumberState) Id() string {
 	return "select_max_number"
 }
 func (s *SelectMaxNumberState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
-	ui.Console.Write(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MaxNumber))
-	ui.Console.Write("> ")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
+	ui.DisplayText(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MaxNumber))
+	ui.DisplayText("> ")
 }
 func (s *SelectMaxNumberState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.MaxNumber, s.game.MinNumber, s.game.MaxRangeNumber)
@@ -131,7 +131,7 @@ func (g *StartGameState) Init(ctx *core.GameContext, ui *core.UiContext) (core.S
 	return g, nil
 }
 func (g *StartGameState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "game_start")+"\r\n", g.game.MinNumber, g.game.MaxNumber, g.game.GetAttempts()))
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "game_start")+"\r\n", g.game.MinNumber, g.game.MaxNumber, g.game.GetAttempts()))
 }
 func (g *StartGameState) Handle(_ *core.GameContext, _ *core.UiContext, _ string) (core.State, error) {
 	return &GameState{}, nil
@@ -147,8 +147,8 @@ func (g *GameState) Id() string {
 	return "game"
 }
 func (g *GameState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "attempts_left")+"\r\n", g.game.GetAttempts()))
-	ui.Console.Write("> ")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "attempts_left")+"\r\n", g.game.GetAttempts()))
+	ui.DisplayText("> ")
 }
 func (g *GameState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseIntInRange(input, g.game.MinNumber, g.game.MaxNumber)
@@ -183,9 +183,9 @@ func (e *EndGameState) Id() string {
 }
 func (e *EndGameState) Display(ctx *core.GameContext, ui *core.UiContext) {
 	if e.game.CheckWin() {
-		ui.Console.Write(ui.GetLocalizedStateMsg(e, "win") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(e, "win") + "\r\n")
 	} else {
-		ui.Console.Write(ui.GetLocalizedStateMsg(e, "loss") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(e, "loss") + "\r\n")
 	}
 }
 func (e *EndGameState) Handle(ctx *core.GameContext, ui *core.UiContext, _ string) (core.State, error) {
@@ -228,11 +228,11 @@ func (s *SelectDifficultyMenuState) Id() string {
 	return "select_difficulty_menu"
 }
 func (s *SelectDifficultyMenuState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
 	for d := VeryEasy; d <= VeryHard; d++ {
-		ui.Console.Write(fmt.Sprintf("%d. %s.\r\n", d, ui.GetLocalizedMsg(ui.GameLocalizer, d.String())))
+		ui.DisplayText(fmt.Sprintf("%d. %s.\r\n", d, ui.GetLocalizedMsg(ui.GameLocalizer, d.String())))
 	}
-	ui.Console.Write("> ")
+	ui.DisplayText("> ")
 }
 func (s *SelectDifficultyMenuState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseInt(input)

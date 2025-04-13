@@ -66,10 +66,10 @@ func (g *GameState) Id() string {
 	return "game"
 }
 func (g *GameState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "score")+"\r\n", g.game.PlayerScore, g.game.BotScore))
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "current_round")+"\r\n", g.game.CurrentRound, g.game.TotalRounds))
-	ui.Console.Write(ui.GetLocalizedStateMsg(g, "prompt") + "\r\n")
-	ui.Console.Write("> ")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "score")+"\r\n", g.game.PlayerScore, g.game.BotScore))
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "current_round")+"\r\n", g.game.CurrentRound, g.game.TotalRounds))
+	ui.DisplayText(ui.GetLocalizedStateMsg(g, "prompt") + "\r\n")
+	ui.DisplayText("> ")
 }
 func (g *GameState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	option, err := ui.Validator.ParseInt(input)
@@ -93,15 +93,15 @@ func (g *GameState) Handle(ctx *core.GameContext, ui *core.UiContext, input stri
 func (g *GameState) Play(ctx *core.GameContext, ui *core.UiContext, playerMove Move) (core.State, error) {
 	g.game.MakePlayerMove(playerMove)
 	g.game.MakeBotMove()
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "moves_info")+"\r\n", ui.GetLocalizedMsg(ui.GameLocalizer, g.game.PlayerMove.String()), ui.GetLocalizedMsg(ui.GameLocalizer, g.game.BotMove.String())))
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "moves_info")+"\r\n", ui.GetLocalizedMsg(ui.GameLocalizer, g.game.PlayerMove.String()), ui.GetLocalizedMsg(ui.GameLocalizer, g.game.BotMove.String())))
 	result := g.game.PlayRound()
 	switch result {
 	case Winning:
-		ui.Console.Write(ui.GetLocalizedStateMsg(g, "round_win") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(g, "round_win") + "\r\n")
 	case Loss:
-		ui.Console.Write(ui.GetLocalizedStateMsg(g, "round_loss") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(g, "round_loss") + "\r\n")
 	case Draw:
-		ui.Console.Write(ui.GetLocalizedStateMsg(g, "round_draw") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(g, "round_draw") + "\r\n")
 	}
 	if g.game.CurrentRound > g.game.TotalRounds {
 		return &EndGameState{}, nil
@@ -115,13 +115,13 @@ func (e *EndGameState) Id() string {
 	return "end_game"
 }
 func (e *EndGameState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(e, "score")+"\r\n", e.game.PlayerScore, e.game.BotScore))
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(e, "score")+"\r\n", e.game.PlayerScore, e.game.BotScore))
 	if e.game.CheckWin() {
-		ui.Console.Write(ui.GetLocalizedStateMsg(e, "win") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(e, "win") + "\r\n")
 	} else if e.game.CheckLoss() {
-		ui.Console.Write(ui.GetLocalizedStateMsg(e, "loss") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(e, "loss") + "\r\n")
 	} else {
-		ui.Console.Write(ui.GetLocalizedStateMsg(e, "draw") + "\r\n")
+		ui.DisplayText(ui.GetLocalizedStateMsg(e, "draw") + "\r\n")
 	}
 }
 func (e *EndGameState) Handle(ctx *core.GameContext, ui *core.UiContext, _ string) (core.State, error) {
@@ -137,9 +137,9 @@ func (s *SelectRoundsState) Id() string {
 	return "select_rounds"
 }
 func (s *SelectRoundsState) Display(ctx *core.GameContext, ui *core.UiContext) {
-	ui.Console.Write(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
-	ui.Console.Write(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "current_value")+"\r\n", s.game.TotalRounds))
-	ui.Console.Write("> ")
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "current_value")+"\r\n", s.game.TotalRounds))
+	ui.DisplayText("> ")
 }
 func (s *SelectRoundsState) Handle(ctx *core.GameContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.TotalRounds, s.game.MinRounds, s.game.MaxRounds)

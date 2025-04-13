@@ -9,7 +9,7 @@ type Command interface {
 type BaseCommand struct{}
 
 func (c *BaseCommand) Execute(ctx *GameContext, ui *UiContext, args []string) (State, error) {
-	ui.Console.Write(ui.GetLocalizedMsg(ui.AppLocalizer, "unknown_command_action"))
+	ui.DisplayText(ui.GetLocalizedMsg(ui.AppLocalizer, "unknown_command_action"))
 	return ctx.GetCurrentState()
 }
 func (c *BaseCommand) Id() string {
