@@ -38,6 +38,16 @@
         "en": ["?", "info"],
         "ru": ["?", "справка", "информация"]
       }
+    },
+    "version": {
+      "name": {
+        "en": "version",
+        "ru": "версия"
+      },
+      "description": {
+        "en": "Displays the current version of the application.",
+        "ru": "Показывает текущую версию приложения."
+      }
     }
   }
 }

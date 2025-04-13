@@ -25,7 +25,8 @@ for PLATFORM in "${PLATFORMS[@]}"; do
   mkdir -p "$OUTPUT_DIR"
 
   echo "Building for $GOOS/$GOARCH..."
-  GOOS=$GOOS GOARCH=$GOARCH go build -o "$OUTPUT_DIR/$BINARY_NAME" .
+  BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  GOOS=$GOOS GOARCH=$GOARCH go build -ldflags "-X game_hub/core.Version=$VERSION -X game_hub/core.BuildTime=$BUILD_TIME" -o "$OUTPUT_DIR/$BINARY_NAME"
 
   mkdir -p "$OUTPUT_DIR/core" "$OUTPUT_DIR/app" "$OUTPUT_DIR/games"
   cp core/*.json "$OUTPUT_DIR/core/" 2>/dev/null || true

@@ -72,6 +72,23 @@ func (c *ExitCommand) Execute(ctx *GameContext, ui *UiContext, args []string) (S
 	return ctx.Game.GetStartState(), nil
 }
 
+type VersionCommand struct{ BaseCommand }
+
+func (c *VersionCommand) Id() string {
+	return "version"
+}
+
+func (c *VersionCommand) Execute(ctx *GameContext, ui *UiContext, args []string) (State, error) {
+	versionMsg := ui.GetLocalizedMsg(ui.AppLocalizer, "version_info")
+	versionMsg = fmt.Sprintf(versionMsg, Version, BuildTime)
+	ui.Console.Write(versionMsg + "\r\n")
+	state, err := ctx.GetCurrentState()
+	if err != nil {
+		return nil, err
+	}
+	return state, nil
+}
+
 type ConfirmCommand struct{ BaseCommand }
 
 func (c *ConfirmCommand) Id() string {

@@ -28,5 +28,6 @@ func DefaultGlobalCommands() []Command {
 	return []Command{
 		&HelpCommand{},
 		&QuitCommand{},
+		&VersionCommand{},
 	}
 }
