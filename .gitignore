@@ -1,0 +1,27 @@
+# Binaries Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Tmp Go files
+*.test
+*.prof
+
+# Local IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs and other tmp files
+*.log
+tmp/
+temp/
+
+# Go dependencies (if using go mod vendor)
+vendor/
+
+# macOS
+.DS_Store

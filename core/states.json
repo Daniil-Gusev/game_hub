@@ -1,0 +1,58 @@
+{
+  "core": {
+    "unknown": {
+      "description": {
+        "en": "The description for this state is not defined.",
+        "ru": "Описание для этого состояния не определено."
+      }
+    },
+    "init_game": {
+      "messages": {
+        "game_welcome": {
+          "en": "Welcome to the game \"%s\". Good luck!",
+          "ru": "Добро пожаловать в игру \"%s\". Желаем удачи!"
+        }
+      }
+    },
+    "exit": {
+      "messages": {
+        "exit": {
+          "en": "See you next time!",
+          "ru": "До новых встреч!"
+        }
+      }
+    },
+    "menu": {
+      "description": {
+        "en": "You are in a menu. You need to enter the number of the menu item you wish to select.",
+        "ru": "Вы находитесь в меню. Вам необходимо ввести номер того пункта меню, который вы желаете выбрать."
+      },
+      "messages": {
+        "make_your_choice": {
+          "en": "Make your choice.",
+          "ru": "Сделайте ваш выбор."
+        },
+        "invalid_option": {
+          "en": "There is no such item in the menu.",
+          "ru": "В меню нет выбранного вами пункта."
+        }
+      }
+    },
+    "confirmation_dialog": {
+      "description": {
+        "en": "You are in a confirmation dialog for your last action. You need to confirm or cancel it.",
+        "ru": "Вы находитесь в диалоговом меню подтверждения последнего действия. Вам необходимо подтвердить это действие или отменить его."
+      },
+      "messages": {
+        "confirmation_default": {
+          "en": "Are you sure?",
+          "ru": "Вы уверены?"
+        },
+        "confirmation_prompt": {
+          "en": "You need to confirm or cancel your choice (yes/no).",
+          "ru": "Вам необходимо подтвердить или отменить свой выбор (да/нет)."
+        }
+      }
+    }
+  }
+}

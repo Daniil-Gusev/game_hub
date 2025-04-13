@@ -1,0 +1,30 @@
+{
+  "guessnumber": {
+    "name": {
+      "en": "Guess the Number",
+      "ru": "Угадай число"
+    },
+    "description": {
+      "en": "You need to choose a range of numbers and then guess a random number from it within a certain number of attempts.",
+      "ru": "Необходимо выбрать диапазон чисел и затем угадать случайное число из него за определенное количество попыток."
+    },
+    "author": {
+      "en": "Daniil Gusev",
+      "ru": "Даниил Гусев"
+    }
+  },
+  "rockpaperscissors": {
+    "name": {
+      "en": "Rock, Paper, Scissors",
+      "ru": "Камень, ножницы, бумага"
+    },
+    "description": {
+      "en": "A simple game where two players simultaneously choose one of three moves (rock, scissors, or paper), and the winner is determined by the rules: rock beats scissors, scissors beats paper, paper beats rock.",
+      "ru": "Простая игра, в которой два игрока одновременно выбирают один из трех ходов (камень, ножницы или бумага), а победитель определяется по правилам: камень побеждает ножницы, ножницы побеждают бумагу, бумага побеждает камень."
+    },
+    "author": {
+      "en": "Daniil Gusev",
+      "ru": "Даниил Гусев"
+    }
+  }
+}

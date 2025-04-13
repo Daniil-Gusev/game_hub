@@ -1,0 +1,43 @@
+{
+  "core": {
+    "unknown": {
+      "name": {
+        "en": "unknown",
+        "ru": "неизвестно"
+      },
+      "description": {
+        "en": "Unknown command.",
+        "ru": "Неизвестная команда."
+      },
+      "aliases": {}
+    },
+    "quit": {
+      "name": {
+        "en": "quit",
+        "ru": "конец"
+      },
+      "description": {
+        "en": "Immediately terminates the program.",
+        "ru": "Немедленно завершает программу."
+      },
+      "aliases": {
+        "en": ["exit", "terminate"],
+        "ru": ["выйти"]
+      }
+    },
+    "help": {
+      "name": {
+        "en": "help",
+        "ru": "помощь"
+      },
+      "description": {
+        "en": "Displays help information.",
+        "ru": "Отображает справочную информацию."
+      },
+      "aliases": {
+        "en": ["?", "info"],
+        "ru": ["?", "справка", "информация"]
+      }
+    }
+  }
+}

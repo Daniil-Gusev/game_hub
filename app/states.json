@@ -1,0 +1,32 @@
+{
+  "app": {
+    "game_selection_menu": {
+      "description": {
+        "en": "You are in the main menu of the Game Hub. Select the desired game from the list by entering its number. Good luck!",
+        "ru": "Вы находитесь в главном меню игрового центра. Выберите желаемую игру из списка, введя её номер. Удачи!"
+      },
+      "messages": {
+        "welcome": {
+          "en": "Welcome to Game Hub!",
+          "ru": "Добро пожаловать в Game Hub!"
+        },
+        "make_your_choice": {
+          "en": "Make your choice.",
+          "ru": "Сделайте ваш выбор."
+        },
+        "invalid_option": {
+          "en": "There is no such item in the menu.",
+          "ru": "В меню нет выбранного вами пункта."
+        },
+        "exit_option": {
+          "en": "Exit",
+          "ru": "Выход"
+        },
+        "available_games": {
+          "en": "Available games:",
+          "ru": "Доступные игры:"
+        }
+      }
+    }
+  }
+}

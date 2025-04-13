@@ -1,0 +1,60 @@
+{
+  "core": {
+    "back": {
+      "name": {
+        "en": "back",
+        "ru": "назад"
+      },
+      "description": {
+        "en": "Returns to the previous step.",
+        "ru": "Возвращает к предыдущему шагу."
+      },
+      "aliases": {
+        "en": [],
+        "ru": ["вернуться"]
+      }
+    },
+    "exit": {
+      "name": {
+        "en": "exit",
+        "ru": "выйти"
+      },
+      "description": {
+        "en": "Returns to the main menu of the current game.",
+        "ru": "Возвращает в главное меню текущей игры."
+      },
+      "aliases": {
+        "en": ["leave"],
+        "ru": ["покинуть"]
+      }
+    },
+    "confirm": {
+      "name": {
+        "en": "confirm",
+        "ru": "подтвердить"
+      },
+      "description": {
+        "en": "Confirms the specified action.",
+        "ru": "Подтверждает указанное действие."
+      },
+      "aliases": {
+        "en": ["yes"],
+        "ru": ["да"]
+      }
+    },
+    "cancel": {
+      "name": {
+        "en": "cancel",
+        "ru": "отменить"
+      },
+      "description": {
+        "en": "Cancels the specified action.",
+        "ru": "Отменяет указанное действие."
+      },
+      "aliases": {
+        "en": ["no"],
+        "ru": ["нет"]
+      }
+    }
+  }
+}

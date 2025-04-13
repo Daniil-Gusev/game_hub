@@ -1,0 +1,30 @@
+{
+  "rock": {
+    "en": "Rock",
+    "ru": "Камень"
+  },
+  "scissors": {
+    "en": "Scissors",
+    "ru": "Ножницы"
+  },
+  "paper": {
+    "en": "Paper",
+    "ru": "Бумага"
+  },
+  "winning": {
+    "en": "You win this round!",
+    "ru": "Вы побеждаете в этом раунде!"
+  },
+  "loss": {
+    "en": "Your opponent wins this round.",
+    "ru": "В этом раунде побеждает ваш соперник."
+  },
+  "draw": {
+    "en": "It's a draw this round.",
+    "ru": "В этом раунде у вас ничья."
+  },
+  "current_value": {
+    "en": "Current value: %d.",
+    "ru": "Текущее значение: %d."
+  }
+}

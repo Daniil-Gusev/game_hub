@@ -1,0 +1,18 @@
+{
+  "game": {
+    "restart": {
+      "name": {
+        "en": "restart",
+        "ru": "перезапуск"
+      },
+      "description": {
+        "en": "Restarts the current game.",
+        "ru": "Начинает текущую игру сначала."
+      },
+      "aliases": {
+        "en": ["retry", "reset"],
+        "ru": ["заново", "перезапустить"]
+      }
+    }
+  }
+}

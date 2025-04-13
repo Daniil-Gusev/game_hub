@@ -1,0 +1,18 @@
+{
+  "game": {
+    "custom_action": {
+      "name": {
+        "en": "action",
+        "ru": "действие"
+      },
+      "description": {
+        "en": "Performs a custom action.",
+        "ru": "Выполняет пользовательское действие."
+      },
+      "aliases": {
+        "en": ["act"],
+        "ru": ["действовать"]
+      }
+    }
+  }
+}
