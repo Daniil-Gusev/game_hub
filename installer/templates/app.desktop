@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=$AppName
+Exec=$BinaryPath
+Type=Application
+Terminal=true

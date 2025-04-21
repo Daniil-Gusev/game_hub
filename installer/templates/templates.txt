@@ -1,0 +1,38 @@
+===== Файл: /Users/daniilgusev/go/game_hub/templates/run.sh =====
+#!/bin/bash
+SCRIPT_DIR=$(dirname "$0")
+BINARY_PATH="$SCRIPT_DIR/../Resources/$BinaryName"
+osascript -e 'tell application "Terminal" to activate' -e "tell application \"Terminal\" to do script \"\\\"$BINARY_PATH\\\"\""
+End Of File 
+
+===== Файл: /Users/daniilgusev/go/game_hub/templates/app.desktop =====
+[Desktop Entry]
+Name=$AppName
+Exec=$BinaryPath
+Type=Application
+Terminal=true
+End Of File 
+
+===== Файл: /Users/daniilgusev/go/game_hub/templates/info.plist =====
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>
+    <string>$AppName</string>
+    <key>CFBundleVersion</key>
+    <string>$AppVersion</string>
+    <key>CFBundleShortVersionString</key>
+    <string>$AppVersion</string>
+    <key>CFBundleExecutable</key>
+    <string>run.sh</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.Daniil-Gusev.$AppName</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+</dict>
+</plist>
+End Of File 
+
