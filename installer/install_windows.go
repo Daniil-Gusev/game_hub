@@ -23,7 +23,7 @@ func installWindows() error {
 	}
 
 	binaryDest := filepath.Join(appDir, BinaryName)
-	if err := copyEmbeddedFile(installFiles, filepath.Join("install", BinaryName), binaryDest); err != nil {
+	if err := copyEmbeddedFile(installFiles, ("install" + "/" + BinaryName), binaryDest); err != nil {
 		return errors.New("failed to copy binary: " + err.Error())
 	}
 

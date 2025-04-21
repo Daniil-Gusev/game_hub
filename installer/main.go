@@ -139,7 +139,7 @@ func portableInstallation() error {
 		binaryDest := filepath.Join(appDir, BinaryName)
 		return copyEmbeddedFile(installFiles, binaryPath, binaryDest)
 	case "linux", "windows":
-		binaryPath := filepath.Join("install", BinaryName)
+		binaryPath := "install" + "/" + BinaryName
 		binaryDest := filepath.Join(appDir, BinaryName)
 		return copyEmbeddedFile(installFiles, binaryPath, binaryDest)
 	default:
@@ -195,7 +195,7 @@ func copyEmbeddedDir(fs embed.FS, srcDir, destDir string) error {
 	}
 
 	for _, entry := range entries {
-		srcPath := filepath.Join(srcDir, entry.Name())
+		srcPath := srcDir + "/" + entry.Name()
 		destPath := filepath.Join(destDir, entry.Name())
 
 		if entry.IsDir() {
