@@ -63,6 +63,10 @@ func run() error {
 			fmt.Println("Exiting installer...")
 			return nil
 		case choiceDefault:
+			if runtime.GOOS == "linux" && !isRoot() {
+				fmt.Println("This operation requires superuser privileges.\nPlease run the installer with sudo for a system-wide installation.")
+				continue
+			}
 			fmt.Println("\nStarting default installation...")
 			err = defaultInstallation()
 		case choicePortable:
@@ -225,4 +229,8 @@ func copyEmbeddedFile(fs embed.FS, srcPath, destPath string) error {
 		return err
 	}
 	return nil
+}
+
+func isRoot() bool {
+	return os.Getuid() == 0
 }
