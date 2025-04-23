@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 )
 
@@ -24,11 +25,12 @@ var (
 )
 
 const (
-	choiceExit          = "0"
-	choiceDefault       = "1"
-	choicePortable      = "2"
-	defaultInstallPerms = 0755
+	choiceExit     = "0"
+	choiceDefault  = "1"
+	choicePortable = "2"
 )
+
+var defaultInstallPerms os.FileMode = 0755
 
 func main() {
 	if err := run(); err != nil {
@@ -66,6 +68,9 @@ func run() error {
 			if runtime.GOOS == "linux" && !isRoot() {
 				fmt.Println("This operation requires superuser privileges.\nPlease run the installer with sudo for a system-wide installation.")
 				continue
+			} else if runtime.GOOS == "windows" && !isAdmin() {
+				fmt.Println("This operation requires administrator privileges.\nRight-click the installer and select 'Run as administrator' for a system-wide installation.")
+				continue
 			}
 			fmt.Println("\nStarting default installation...")
 			err = defaultInstallation()
@@ -87,19 +92,19 @@ func run() error {
 
 func defaultInstallation() error {
 	fmt.Println("Preparing installation directories...")
-	configDir, err := os.UserConfigDir()
+	configDir, err := OsConfigDir(runtime.GOOS)
 	if err != nil {
 		return errors.New("failed to get user config directory: " + err.Error())
 	}
 
 	dataDest := filepath.Join(configDir, AppName)
 	fmt.Printf("Creating configuration directory at: %s\n", dataDest)
-	if err := os.MkdirAll(dataDest, defaultInstallPerms); err != nil {
+	if err := createDir(dataDest, defaultInstallPerms); err != nil {
 		return errors.New("failed to create config directory: " + err.Error())
 	}
 
 	fmt.Println("Copying application data files...")
-	if err := copyEmbeddedDir(dataFiles, "data", dataDest); err != nil {
+	if err := copyEmbeddedDir(dataFiles, "data", dataDest, defaultInstallPerms); err != nil {
 		return errors.New("failed to copy data files: " + err.Error())
 	}
 
@@ -126,47 +131,71 @@ func portableInstallation() error {
 	appDir := filepath.Join(currentDir, AppName)
 	dataDir := filepath.Join(appDir, "data")
 
+	perms := defaultInstallPerms
 	fmt.Printf("Creating application directory at: %s\n", appDir)
-	if err := os.MkdirAll(dataDir, defaultInstallPerms); err != nil {
-		return errors.New("failed to create portable directories: " + err.Error())
+	if err := createDir(appDir, perms); err != nil {
+		return errors.New("failed to create application directory: " + err.Error())
+	}
+	fmt.Printf("Creating data directory at: %s\n", dataDir)
+	if err := createDir(dataDir, perms); err != nil {
+		return errors.New("failed to create data directory: " + err.Error())
 	}
 
+	setOwnership := isRoot() && os.Getenv("SUDO_UID") != "" && os.Getenv("SUDO_GID") != ""
+
 	fmt.Println("Copying application data files...")
-	if err := copyEmbeddedDir(dataFiles, "data", dataDir); err != nil {
+	if err := copyEmbeddedDir(dataFiles, "data", dataDir, perms); err != nil {
 		return errors.New("failed to copy data files: " + err.Error())
 	}
 
 	fmt.Println("Copying executable files...")
+	var binaryDest string
 	switch runtime.GOOS {
 	case "darwin":
 		binaryPath := filepath.Join("install", AppName+".app", "Contents", "Resources", BinaryName)
-		binaryDest := filepath.Join(appDir, BinaryName)
-		return copyEmbeddedFile(installFiles, binaryPath, binaryDest)
+		binaryDest = filepath.Join(appDir, BinaryName)
+		if err := copyEmbeddedFile(installFiles, binaryPath, binaryDest, perms); err != nil {
+			return err
+		}
 	case "linux", "windows":
 		binaryPath := "install" + "/" + BinaryName
-		binaryDest := filepath.Join(appDir, BinaryName)
-		return copyEmbeddedFile(installFiles, binaryPath, binaryDest)
+		binaryDest = filepath.Join(appDir, BinaryName)
+		if err := copyEmbeddedFile(installFiles, binaryPath, binaryDest, perms); err != nil {
+			return err
+		}
 	default:
 		return errors.New("unsupported platform: " + runtime.GOOS)
 	}
+
+	if setOwnership {
+		if err := setOriginalUserOwnership(appDir); err != nil {
+			fmt.Printf("Warning: failed to set ownership for %s: %v\n", appDir, err)
+		}
+	}
+
+	return nil
 }
 
 func installMacOS() error {
 	fmt.Println("Installing application bundle for macOS...")
 	appDest := filepath.Join("/Applications", AppName+".app")
-	if err := copyEmbeddedDir(installFiles, "install", "/Applications"); err != nil {
+	if err := copyEmbeddedDir(installFiles, "install", "/Applications", defaultInstallPerms); err != nil {
 		return errors.New("failed to copy .app bundle: " + err.Error())
 	}
 
 	fmt.Println("Setting application permissions...")
-	return os.Chmod(appDest, defaultInstallPerms)
+	if err := os.Chmod(appDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to set permissions: " + err.Error())
+	}
+
+	return nil
 }
 
 func installLinux() error {
 	fmt.Println("Installing application for Linux...")
 	binDest := filepath.Join("/usr/local/bin", BinaryName)
 	fmt.Printf("Copying executable to: %s\n", binDest)
-	if err := copyEmbeddedFile(installFiles, filepath.Join("install", BinaryName), binDest); err != nil {
+	if err := copyEmbeddedFile(installFiles, filepath.Join("install", BinaryName), binDest, defaultInstallPerms); err != nil {
 		return errors.New("failed to copy binary: " + err.Error())
 	}
 
@@ -192,7 +221,34 @@ func installLinux() error {
 	return nil
 }
 
-func copyEmbeddedDir(fs embed.FS, srcDir, destDir string) error {
+func createDir(path string, perms os.FileMode) error {
+	parentDir := filepath.Dir(path)
+	if parentDir != "." && parentDir != "/" {
+		if _, err := os.Stat(parentDir); os.IsNotExist(err) {
+			if err := createDir(parentDir, perms); err != nil {
+				return err
+			}
+		}
+	}
+	if err := os.Mkdir(path, perms); err != nil && !os.IsExist(err) {
+		return err
+	}
+	return nil
+}
+
+func copyEmbeddedDir(fs embed.FS, srcDir, destDir string, perms os.FileMode) error {
+	parentDir := filepath.Dir(destDir)
+	setOwnership := shouldSetOriginalUserOwnership(parentDir)
+
+	if err := createDir(destDir, perms); err != nil {
+		return err
+	}
+	if setOwnership && isRoot() {
+		if err := setOriginalUserOwnership(destDir); err != nil {
+			fmt.Printf("Warning: failed to set ownership for %s: %v\n", destDir, err)
+		}
+	}
+
 	entries, err := fs.ReadDir(srcDir)
 	if err != nil {
 		return err
@@ -203,34 +259,114 @@ func copyEmbeddedDir(fs embed.FS, srcDir, destDir string) error {
 		destPath := filepath.Join(destDir, entry.Name())
 
 		if entry.IsDir() {
-			if err := os.MkdirAll(destPath, defaultInstallPerms); err != nil {
-				return err
-			}
-			if err := copyEmbeddedDir(fs, srcPath, destPath); err != nil {
+			if err := copyEmbeddedDir(fs, srcPath, destPath, perms); err != nil {
 				return err
 			}
 		} else {
-			if err := copyEmbeddedFile(fs, srcPath, destPath); err != nil {
+			if err := copyEmbeddedFile(fs, srcPath, destPath, perms); err != nil {
 				return err
+			}
+			if setOwnership && isRoot() {
+				if err := setOriginalUserOwnership(destPath); err != nil {
+					fmt.Printf("Warning: failed to set ownership for %s: %v\n", destPath, err)
+				}
 			}
 		}
 	}
 	return nil
 }
 
-func copyEmbeddedFile(fs embed.FS, srcPath, destPath string) error {
+func copyEmbeddedFile(fs embed.FS, srcPath, destPath string, perms os.FileMode) error {
 	data, err := fs.ReadFile(srcPath)
 	if err != nil {
 		return err
 	}
 
-	err = os.WriteFile(destPath, data, defaultInstallPerms)
+	parentDir := filepath.Dir(destPath)
+	setOwnership := shouldSetOriginalUserOwnership(parentDir)
+
+	err = os.WriteFile(destPath, data, perms)
 	if err != nil {
 		return err
+	}
+
+	if setOwnership && isRoot() {
+		if err := setOriginalUserOwnership(destPath); err != nil {
+			fmt.Printf("Warning: failed to set ownership for %s: %v\n", destPath, err)
+		}
 	}
 	return nil
 }
 
 func isRoot() bool {
 	return os.Getuid() == 0
+}
+
+func OsConfigDir(platform string) (string, error) {
+	switch platform {
+	case "linux":
+		return "/usr/local/share", nil
+	case "windows":
+		return "C:\\ProgramData", nil
+	case "darwin":
+		return "/Library/Application Support", nil
+	default:
+		return "", errors.New("Platform " + platform + " is not supported.")
+	}
+}
+
+func setOriginalUserOwnership(path string) error {
+	uidStr := os.Getenv("SUDO_UID")
+	gidStr := os.Getenv("SUDO_GID")
+	if uidStr == "" || gidStr == "" {
+		return nil // Not running via sudo, no need to change ownership
+	}
+
+	uid, err := strconv.Atoi(uidStr)
+	if err != nil {
+		return fmt.Errorf("invalid SUDO_UID: %v", err)
+	}
+
+	gid, err := strconv.Atoi(gidStr)
+	if err != nil {
+		return fmt.Errorf("invalid SUDO_GID: %v", err)
+	}
+
+	return filepath.Walk(path, func(filePath string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		return os.Chown(filePath, uid, gid)
+	})
+}
+
+func shouldSetOriginalUserOwnership(parentDir string) bool {
+	if !isRoot() {
+		return false
+	}
+
+	uidStr := os.Getenv("SUDO_UID")
+	gidStr := os.Getenv("SUDO_GID")
+	if uidStr == "" || gidStr == "" {
+		return false
+	}
+
+	canWrite, err := canUserWrite(parentDir)
+	if err != nil {
+		fmt.Printf("Warning: cannot check write permissions for %s: %v\n", parentDir, err)
+		return false
+	}
+
+	return canWrite
+}
+
+func canUserWrite(path string) (bool, error) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return false, err
+	}
+
+	mode := info.Mode().Perm()
+
+	return mode&0022 != 0, nil // Право записи для группы (0020) или остальных (0002)
 }

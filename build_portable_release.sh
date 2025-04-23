@@ -11,7 +11,7 @@ VERSION="$1"
 APP_NAME="GameHub"
 BINARY_BASE_NAME="game_hub"
 MODULE_PATH="game_hub/core"
-PLATFORMS=("linux/amd64" "linux/arm64" "windows/amd64" "windows/arm64" "darwin/amd64" "darwin/arm64")
+PLATFORMS=("linux/amd64" "linux/386" "linux/arm64" "windows/amd64" "windows/arm64" "darwin/amd64" "darwin/arm64")
 RELEASE_DIR="release/portable"
 
 # Check for 7z availability

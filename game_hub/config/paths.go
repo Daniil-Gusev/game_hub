@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 // PathConfig manages paths to configuration files.
@@ -36,11 +37,11 @@ func NewPathConfig(appName string) (*PathConfig, error) {
 	}
 
 	// Installed mode: use system configuration directory
-	userConfigDir, err := os.UserConfigDir()
+	configDir, err := OsConfigDir(runtime.GOOS)
 	if err != nil {
 		return nil, err
 	}
-	baseDir := filepath.Join(userConfigDir, appName)
+	baseDir := filepath.Join(configDir, appName)
 	gamesDir := filepath.Join(baseDir, "games")
 
 	if _, err := os.Stat(baseDir); os.IsNotExist(err) {
@@ -115,4 +116,16 @@ func (pc *PathConfig) GameCommandsPath(gameID string) string {
 // GameTranslationsPath returns the path to translations.json for a specific game.
 func (pc *PathConfig) GameTranslationsPath(gameID string) string {
 	return filepath.Join(pc.gamesDir, gameID, "translations.json")
+}
+func OsConfigDir(platform string) (string, error) {
+	switch platform {
+	case "linux":
+		return "/usr/local/share", nil
+	case "windows":
+		return "C:\\ProgramData", nil
+	case "darwin":
+		return "/Library/Application Support", nil
+	default:
+		return "", errors.New("Platform " + platform + " is not supported.")
+	}
 }

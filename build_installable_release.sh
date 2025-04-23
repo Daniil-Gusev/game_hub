@@ -10,7 +10,7 @@ APP_NAME="GameHub"
 BINARY_BASE_NAME="game_hub"
 MODULE_PATH="game_hub/core"
 INSTALLER_MODULE_PATH="main"
-PLATFORMS=("linux/amd64" "linux/arm64" "windows/amd64" "windows/arm64" "darwin/amd64" "darwin/arm64")
+PLATFORMS=("linux/amd64" "linux/386" "linux/arm64" "windows/amd64" "windows/arm64" "darwin/amd64" "darwin/arm64")
 RELEASE_DIR="release/installers"
 
 USE_7Z=true
@@ -72,7 +72,7 @@ for PLATFORM in "${PLATFORMS[@]}"; do
   if [ "$GOOS" = "darwin" ]; then
     cd installer
     echo "Generating installer wrapper for $GOOS..."
-    ./generate_wrapper.sh "$GOOS" "${APP_NAME}Installer" "$VERSION" "$INSTALLER_OUTPUT" "../$OUTPUT_DIR"
+    ./generate_wrapper.sh --with-sudo "$GOOS" "${APP_NAME}Installer" "$VERSION" "$INSTALLER_OUTPUT" "../$OUTPUT_DIR"
     rm "$INSTALLER_OUTPUT"
     cd ../
   fi

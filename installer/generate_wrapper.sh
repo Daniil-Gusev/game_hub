@@ -1,7 +1,23 @@
 #!/bin/bash
 
+sudo_enabled="NO"
+
+while [ "$#" -gt 0 ]; do
+    case "$1" in
+        --with-sudo)
+            if [ "$2" = "darwin" ]; then
+                sudo_enabled="YES"
+            fi
+            shift
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
 if [ "$#" -ne 5 ]; then
-    echo "Usage: $0 <platform: linux|darwin> <app_name> <version> <binary_path> <output_dir>"
+    echo "Usage: $0 [--with-sudo] <platform: linux|darwin> <app_name> <version> <binary_path> <output_dir>"
     exit 1
 fi
 
@@ -31,6 +47,7 @@ render_template() {
         -e "s/\$AppName/$app_name/g" \
         -e "s/\$AppVersion/$app_version/g" \
         -e "s/\$BinaryName/$binary_name/g" \
+        -e "s/\$Sudo/$sudo_enabled/g" \
         "$template_file"
 }
 
