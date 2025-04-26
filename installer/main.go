@@ -26,16 +26,19 @@ var (
 )
 
 const (
-	choiceExit     = "0"
-	choiceDefault  = "1"
-	choicePortable = "2"
+	choiceExit                 = "0"
+	choiceSystemInstallation   = "1"
+	choicePortableInstallation = "2"
+	choiceSystemUninstallation = "3"
+	systemInstallationOption   = "system_installation"
+	systemUninstallationOption = "system_uninstallation"
 )
 
 var defaultInstallPerms os.FileMode = 0755
 
 func main() {
 	if err := run(); err != nil {
-		fmt.Printf("\nInstallation failed: %v\n", err)
+		fmt.Printf("\nOperation failed: %v\n", err)
 		fmt.Println("\nPress any key to exit...")
 		fmt.Scanln()
 		os.Exit(1)
@@ -47,26 +50,50 @@ func main() {
 func run() error {
 	if len(os.Args) > 1 {
 		arg := os.Args[1]
-		if arg == "default" {
+		var err error
+		switch arg {
+		case systemInstallationOption:
 			if isUnix() && !isElevated() {
-				fmt.Println("This operation requires superuser privileges.\nPlease run the installer with sudo for a system-wide installation.")
+				fmt.Println("System installation requires administrator privileges.")
+				fmt.Println("Please run with 'sudo' for system installation.")
 				os.Exit(0)
 			} else if runtime.GOOS == "windows" && !isElevated() {
-				fmt.Println("This operation requires administrator privileges.\nRight-click the installer and select 'Run as administrator' for a system-wide installation.")
+				fmt.Println("System installation requires administrator privileges.")
+				fmt.Println("Please run as Administrator for system installation.")
 				os.Exit(0)
 			}
-			fmt.Println("Starting default installation...")
-			return defaultInstallation()
+			fmt.Println("Starting system installation...")
+			err = systemInstallation()
+
+		case systemUninstallationOption:
+			if isUnix() && !isElevated() {
+				fmt.Println("System removal requires administrator privileges.")
+				fmt.Println("Please run with 'sudo' for system removal.")
+				os.Exit(0)
+			} else if runtime.GOOS == "windows" && !isElevated() {
+				fmt.Println("System removal requires administrator privileges.")
+				fmt.Println("Please run as Administrator for system removal.")
+				os.Exit(0)
+			}
+			fmt.Println("Starting system removal...")
+			err = systemUninstallation()
 		}
+		if err != nil {
+			return err
+		}
+		fmt.Println("\nOperation completed successfully!")
+		return nil
 	}
+
 	fmt.Println("Welcome to the", AppName, "installer!")
 	fmt.Println("Please choose an option:")
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for {
 		fmt.Println("\n0. Exit")
-		fmt.Println("1. Default installation (recommended)")
+		fmt.Println("1. System installation (recommended)")
 		fmt.Println("2. Portable installation")
+		fmt.Println("3. Uninstall application")
 		fmt.Print("Enter your choice: ")
 		if !scanner.Scan() {
 			fmt.Println("\nInput terminated, exiting installer...")
@@ -79,60 +106,34 @@ func run() error {
 		case choiceExit:
 			fmt.Println("Exiting installer...")
 			return nil
-		case choiceDefault:
-			if isUnix() && !isElevated() {
-				fmt.Println("This operation requires superuser privileges.")
-				return restartWithElevatedPrivileges([]string{"default"})
-			} else if runtime.GOOS == "windows" && !isElevated() {
-				fmt.Println("This operation requires administrator privileges.")
-				return restartWithElevatedPrivileges([]string{"default"})
+		case choiceSystemInstallation:
+			if !isElevated() {
+				fmt.Println("System installation requires administrator privileges.")
+				return restartWithElevatedPrivileges([]string{systemInstallationOption})
 			}
-			fmt.Println("\nStarting default installation...")
-			err = defaultInstallation()
-		case choicePortable:
-			fmt.Println("\nStarting portable installation...")
+			fmt.Println("\nStarting system installation...")
+			err = systemInstallation()
+		case choicePortableInstallation:
+			fmt.Println("\nStarting portable installation in current directory...")
 			err = portableInstallation()
+		case choiceSystemUninstallation:
+			if !isElevated() {
+				fmt.Println("System removal requires administrator privileges.")
+				return restartWithElevatedPrivileges([]string{systemUninstallationOption})
+			}
+			fmt.Println("\nStarting system removal...")
+			err = systemUninstallation()
 		default:
 			fmt.Println("Invalid choice:", choice)
-			fmt.Println("Please choose 0, 1, or 2.")
+			fmt.Println("Please enter 0, 1, 2 or 3.")
 			continue
 		}
+
 		if err != nil {
 			return err
 		}
-		fmt.Println("\nInstallation completed successfully!")
+		fmt.Println("\nOperation completed successfully!")
 		return nil
-	}
-}
-
-func defaultInstallation() error {
-	fmt.Println("Preparing installation directories...")
-	configDir, err := OsConfigDir(runtime.GOOS)
-	if err != nil {
-		return errors.New("failed to get user config directory: " + err.Error())
-	}
-
-	dataDest := filepath.Join(configDir, AppName)
-	fmt.Printf("Creating configuration directory at: %s\n", dataDest)
-	if err := createDir(dataDest, defaultInstallPerms); err != nil {
-		return errors.New("failed to create config directory: " + err.Error())
-	}
-
-	fmt.Println("Copying application data files...")
-	if err := copyEmbeddedDir(dataFiles, "data", dataDest, defaultInstallPerms); err != nil {
-		return errors.New("failed to copy data files: " + err.Error())
-	}
-
-	fmt.Println("Installing application for your platform...")
-	switch runtime.GOOS {
-	case "darwin":
-		return installMacOS()
-	case "linux":
-		return installLinux()
-	case "windows":
-		return installWindows()
-	default:
-		return errors.New("unsupported platform: " + runtime.GOOS)
 	}
 }
 
@@ -175,6 +176,134 @@ func restartWithElevatedPrivileges(args []string) error {
 		return fmt.Errorf("failed to start elevated process: %v", err)
 	}
 	os.Exit(0)
+	return nil
+}
+
+func systemInstallation() error {
+	fmt.Println("Preparing installation directories...")
+	configDir, err := OsConfigDir(runtime.GOOS)
+	if err != nil {
+		return errors.New("failed to get user config directory: " + err.Error())
+	}
+
+	dataDest := filepath.Join(configDir, AppName)
+	fmt.Printf("Creating configuration directory at: %s\n", dataDest)
+	if err := createDir(dataDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to create config directory: " + err.Error())
+	}
+
+	fmt.Println("Copying application data files...")
+	if err := copyEmbeddedDir(dataFiles, "data", dataDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to copy data files: " + err.Error())
+	}
+
+	fmt.Println("Installing application for your platform...")
+	switch runtime.GOOS {
+	case "darwin":
+		return installMacOS()
+	case "linux":
+		return installLinux()
+	case "windows":
+		return installWindows()
+	default:
+		return errors.New("unsupported platform: " + runtime.GOOS)
+	}
+}
+
+func installMacOS() error {
+	fmt.Println("Installing application bundle for macOS...")
+	appDest := filepath.Join("/Applications", AppName+".app")
+	if err := copyEmbeddedDir(installFiles, "install", "/Applications", defaultInstallPerms); err != nil {
+		return errors.New("failed to copy .app bundle: " + err.Error())
+	}
+
+	fmt.Println("Setting application permissions...")
+	if err := os.Chmod(appDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to set permissions: " + err.Error())
+	}
+	return nil
+}
+
+func installLinux() error {
+	fmt.Println("Installing application for Linux...")
+	binDest := filepath.Join("/usr/local/bin", BinaryName)
+	fmt.Printf("Copying executable to: %s\n", binDest)
+	if err := copyEmbeddedFile(installFiles, filepath.Join("install", BinaryName), binDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to copy binary: " + err.Error())
+	}
+
+	fmt.Println("Setting executable permissions...")
+	if err := os.Chmod(binDest, defaultInstallPerms); err != nil {
+		return errors.New("failed to set binary permissions: " + err.Error())
+	}
+
+	fmt.Println("Creating application menu entry...")
+	desktopSrc := filepath.Join("install", AppName+".desktop")
+	desktopData, err := installFiles.ReadFile(desktopSrc)
+	if err != nil {
+		return errors.New("failed to read desktop file: " + err.Error())
+	}
+
+	desktopContent := strings.ReplaceAll(string(desktopData), "$BinaryPath", binDest)
+	desktopDest := filepath.Join("/usr/share/applications", AppName+".desktop")
+	fmt.Printf("Creating desktop entry at: %s\n", desktopDest)
+	if err := os.WriteFile(desktopDest, []byte(desktopContent), defaultInstallPerms); err != nil {
+		return errors.New("failed to write desktop file: " + err.Error())
+	}
+	return nil
+}
+
+func systemUninstallation() error {
+	fmt.Println("Removing application configuration and data...")
+	configDir, err := OsConfigDir(runtime.GOOS)
+	if err != nil {
+		return errors.New("failed to get user config directory: " + err.Error())
+	}
+	dataDir := filepath.Join(configDir, AppName)
+	fmt.Printf("Removing configuration directory: %s\n", dataDir)
+	if err := os.RemoveAll(dataDir); err != nil {
+		return errors.New("failed to remove config directory: " + err.Error())
+	}
+	fmt.Println("Uninstalling application for your platform...")
+	switch runtime.GOOS {
+	case "darwin":
+		return uninstallMacOS()
+	case "linux":
+		return uninstallLinux()
+	case "windows":
+		return uninstallWindows()
+	default:
+		return errors.New("unsupported platform: " + runtime.GOOS)
+	}
+}
+
+func uninstallMacOS() error {
+	fmt.Println("Uninstalling macOS application bundle...")
+	appPath := filepath.Join("/Applications", AppName+".app")
+	if _, err := os.Stat(appPath); os.IsNotExist(err) {
+		fmt.Println("Application bundle not found, skipping...")
+		return nil
+	}
+	fmt.Printf("Removing application bundle: %s\n", appPath)
+	if err := os.RemoveAll(appPath); err != nil {
+		return errors.New("failed to remove .app bundle: " + err.Error())
+	}
+	return nil
+}
+
+func uninstallLinux() error {
+	fmt.Println("Uninstalling Linux application...")
+	binPath := filepath.Join("/usr/local/bin", BinaryName)
+	fmt.Printf("Removing executable: %s\n", binPath)
+	if err := os.Remove(binPath); err != nil && !os.IsNotExist(err) {
+		return errors.New("failed to remove binary: " + err.Error())
+	}
+	// Remove desktop entry
+	desktopPath := filepath.Join("/usr/share/applications", AppName+".desktop")
+	fmt.Printf("Removing desktop entry: %s\n", desktopPath)
+	if err := os.Remove(desktopPath); err != nil && !os.IsNotExist(err) {
+		return errors.New("failed to remove desktop entry: " + err.Error())
+	}
 	return nil
 }
 
@@ -228,51 +357,6 @@ func portableInstallation() error {
 		if err := setOriginalUserOwnership(appDir); err != nil {
 			fmt.Printf("Warning: failed to set ownership for %s: %v\n", appDir, err)
 		}
-	}
-
-	return nil
-}
-
-func installMacOS() error {
-	fmt.Println("Installing application bundle for macOS...")
-	appDest := filepath.Join("/Applications", AppName+".app")
-	if err := copyEmbeddedDir(installFiles, "install", "/Applications", defaultInstallPerms); err != nil {
-		return errors.New("failed to copy .app bundle: " + err.Error())
-	}
-
-	fmt.Println("Setting application permissions...")
-	if err := os.Chmod(appDest, defaultInstallPerms); err != nil {
-		return errors.New("failed to set permissions: " + err.Error())
-	}
-
-	return nil
-}
-
-func installLinux() error {
-	fmt.Println("Installing application for Linux...")
-	binDest := filepath.Join("/usr/local/bin", BinaryName)
-	fmt.Printf("Copying executable to: %s\n", binDest)
-	if err := copyEmbeddedFile(installFiles, filepath.Join("install", BinaryName), binDest, defaultInstallPerms); err != nil {
-		return errors.New("failed to copy binary: " + err.Error())
-	}
-
-	fmt.Println("Setting executable permissions...")
-	if err := os.Chmod(binDest, defaultInstallPerms); err != nil {
-		return errors.New("failed to set binary permissions: " + err.Error())
-	}
-
-	fmt.Println("Creating application menu entry...")
-	desktopSrc := filepath.Join("install", AppName+".desktop")
-	desktopData, err := installFiles.ReadFile(desktopSrc)
-	if err != nil {
-		return errors.New("failed to read desktop file: " + err.Error())
-	}
-
-	desktopContent := strings.ReplaceAll(string(desktopData), "$BinaryPath", binDest)
-	desktopDest := filepath.Join("/usr/share/applications", AppName+".desktop")
-	fmt.Printf("Creating desktop entry at: %s\n", desktopDest)
-	if err := os.WriteFile(desktopDest, []byte(desktopContent), defaultInstallPerms); err != nil {
-		return errors.New("failed to write desktop file: " + err.Error())
 	}
 
 	return nil

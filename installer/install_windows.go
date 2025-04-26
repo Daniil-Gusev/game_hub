@@ -86,3 +86,31 @@ func createWindowsShortcut(targetPath, shortcutPath string) error {
 	}
 	return nil
 }
+
+func uninstallWindows() error {
+	fmt.Println("Removing Windows application...")
+	programFiles, err := windows.KnownFolderPath(windows.FOLDERID_ProgramFiles, 0)
+	if err != nil {
+		return errors.New("failed to get Program Files path: " + err.Error())
+	}
+	appDir := filepath.Join(programFiles, AppName)
+	fmt.Printf("Removing application directory: %s\n", appDir)
+	if err := os.RemoveAll(appDir); err != nil && !os.IsNotExist(err) {
+		return errors.New("failed to remove app directory: " + err.Error())
+	}
+	startMenu, err := windows.KnownFolderPath(windows.FOLDERID_StartMenu, 0)
+	if err != nil {
+		return errors.New("failed to get Start Menu path: " + err.Error())
+	}
+	shortcutDir := filepath.Join(startMenu, "Programs", AppName)
+	shortcutPath := filepath.Join(shortcutDir, AppName+".lnk")
+	fmt.Printf("Removing Start Menu shortcut: %s\n", shortcutPath)
+	if err := os.Remove(shortcutPath); err != nil && !os.IsNotExist(err) {
+		return errors.New("failed to remove shortcut: " + err.Error())
+	}
+	fmt.Printf("Removing Start Menu folder: %s\n", shortcutDir)
+	if err := os.Remove(shortcutDir); err != nil && !os.IsNotExist(err) {
+		return errors.New("failed to remove Start Menu folder: " + err.Error())
+	}
+	return nil
+}
