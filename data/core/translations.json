@@ -1,7 +1,7 @@
 {
   "version_info": {
-    "en": "Game Hub Version: %s, Built: %s",
-    "ru": "Game Hub Версия: %s, Собрано: %s"
+    "en": "Game Hub Version: %s, Built: %s.",
+    "ru": "Game Hub Версия: %s, Собрано: %s."
   },
   "invalid_input": {
     "en": "You must enter an integer.",

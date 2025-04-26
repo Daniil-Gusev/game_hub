@@ -72,7 +72,7 @@ for PLATFORM in "${PLATFORMS[@]}"; do
   if [ "$GOOS" = "darwin" ]; then
     cd installer
     echo "Generating installer wrapper for $GOOS..."
-    ./generate_wrapper.sh --with-sudo "$GOOS" "${APP_NAME}Installer" "$VERSION" "$INSTALLER_OUTPUT" "../$OUTPUT_DIR"
+    ./generate_wrapper.sh "$GOOS" "${APP_NAME}Installer" "$VERSION" "$INSTALLER_OUTPUT" "../$OUTPUT_DIR"
     rm "$INSTALLER_OUTPUT"
     cd ../
   fi

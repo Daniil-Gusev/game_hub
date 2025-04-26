@@ -3,6 +3,7 @@ package core
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type QuitCommand struct{ BaseCommand }
@@ -77,16 +78,18 @@ type VersionCommand struct{ BaseCommand }
 func (c *VersionCommand) Id() string {
 	return "version"
 }
-
 func (c *VersionCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	versionMsg := ui.GetLocalizedMsg(ui.AppLocalizer, "version_info")
-	versionMsg = fmt.Sprintf(versionMsg, Version, BuildTime)
-	ui.DisplayText(versionMsg + "\r\n")
-	state, err := ctx.GetCurrentState()
+	var displayTime string
+	builtTime, err := time.Parse(time.RFC3339, BuildTime)
 	if err != nil {
-		return nil, err
+		displayTime = BuildTime
+	} else {
+		displayTime = builtTime.Format("02.01.2006 15:04:05")
 	}
-	return state, nil
+	versionMsg = fmt.Sprintf(versionMsg, Version, displayTime)
+	ui.DisplayText(versionMsg + "\r\n")
+	return ctx.GetCurrentState()
 }
 
 type ConfirmCommand struct{ BaseCommand }

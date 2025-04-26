@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -44,6 +45,20 @@ func main() {
 }
 
 func run() error {
+	if len(os.Args) > 1 {
+		arg := os.Args[1]
+		if arg == "default" {
+			if isUnix() && !isElevated() {
+				fmt.Println("This operation requires superuser privileges.\nPlease run the installer with sudo for a system-wide installation.")
+				os.Exit(0)
+			} else if runtime.GOOS == "windows" && !isElevated() {
+				fmt.Println("This operation requires administrator privileges.\nRight-click the installer and select 'Run as administrator' for a system-wide installation.")
+				os.Exit(0)
+			}
+			fmt.Println("Starting default installation...")
+			return defaultInstallation()
+		}
+	}
 	fmt.Println("Welcome to the", AppName, "installer!")
 	fmt.Println("Please choose an option:")
 
@@ -65,12 +80,12 @@ func run() error {
 			fmt.Println("Exiting installer...")
 			return nil
 		case choiceDefault:
-			if runtime.GOOS == "linux" && !isRoot() {
-				fmt.Println("This operation requires superuser privileges.\nPlease run the installer with sudo for a system-wide installation.")
-				continue
-			} else if runtime.GOOS == "windows" && !isAdmin() {
-				fmt.Println("This operation requires administrator privileges.\nRight-click the installer and select 'Run as administrator' for a system-wide installation.")
-				continue
+			if isUnix() && !isElevated() {
+				fmt.Println("This operation requires superuser privileges.")
+				return restartWithElevatedPrivileges([]string{"default"})
+			} else if runtime.GOOS == "windows" && !isElevated() {
+				fmt.Println("This operation requires administrator privileges.")
+				return restartWithElevatedPrivileges([]string{"default"})
 			}
 			fmt.Println("\nStarting default installation...")
 			err = defaultInstallation()
@@ -119,6 +134,48 @@ func defaultInstallation() error {
 	default:
 		return errors.New("unsupported platform: " + runtime.GOOS)
 	}
+}
+
+func restartWithElevatedPrivileges(args []string) error {
+	executable, err := os.Executable()
+	if err != nil {
+		return fmt.Errorf("failed to get executable path: %v", err)
+	}
+
+	var cmdName string
+	var cmdArgs []string
+
+	switch runtime.GOOS {
+	case "windows":
+		cmdName = "powershell"
+		quotedArgs := make([]string, len(args))
+		for i, arg := range args {
+			quotedArgs[i] = fmt.Sprintf("'%s'", strings.ReplaceAll(arg, "'", "''"))
+		}
+		argsStr := strings.Join(quotedArgs, ", ")
+		cmdArgs = []string{
+			"-Command",
+			fmt.Sprintf("Start-Process '%s' -ArgumentList %s -Verb runas", executable, argsStr),
+		}
+	case "darwin", "linux":
+		cmdName = "sudo"
+		cmdArgs = []string{
+			executable,
+		}
+		cmdArgs = append(cmdArgs, args...)
+	default:
+		return errors.New("unsupported platform: " + runtime.GOOS)
+	}
+
+	cmd := exec.Command(cmdName, cmdArgs...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to start elevated process: %v", err)
+	}
+	os.Exit(0)
+	return nil
 }
 
 func portableInstallation() error {
@@ -369,4 +426,17 @@ func canUserWrite(path string) (bool, error) {
 	mode := info.Mode().Perm()
 
 	return mode&0022 != 0, nil // Право записи для группы (0020) или остальных (0002)
+}
+func isElevated() bool {
+	switch runtime.GOOS {
+	case "windows":
+		return isAdmin()
+	case "linux", "darwin":
+		return isRoot()
+	default:
+		return false
+	}
+}
+func isUnix() bool {
+	return runtime.GOOS == "linux" || runtime.GOOS == "darwin"
 }
