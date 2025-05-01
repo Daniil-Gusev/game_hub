@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"game_hub/app"
 	"game_hub/config"
 	"game_hub/core"
@@ -13,8 +14,14 @@ func main() {
 	availableGames := games.AvailableGames()
 	lm := core.NewLocalizationManager("")
 	appMessageLocalizer := core.NewMessageLocalizer(lm)
+	console, err := core.NewStdReadlineConsole()
+	if err != nil {
+		fmt.Errorf("Failed to initialize console: %v\r\n", err)
+		return
+	}
+	defer console.Close()
 	uiCtx := &core.UiContext{
-		Console:             core.NewStdConsole(),
+		Console:             console,
 		Validator:           core.InputValidator{},
 		ErrHandler:          core.NewLocalizedErrorHandler(appMessageLocalizer),
 		CommandRegistry:     core.NewCommandRegistry(core.NewCommandLocalizer(lm), core.NewCommandLocalizer(lm)),

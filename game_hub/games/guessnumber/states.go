@@ -68,7 +68,6 @@ func (s *SelectMinNumberState) Display(ctx *core.AppContext, ui *core.UiContext)
 	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
 	ui.DisplayText(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MinNumber))
-	ui.DisplayText("> ")
 }
 func (s *SelectMinNumberState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.MinNumber, s.game.MinRangeNumber, s.game.MaxRangeNumber)
@@ -94,7 +93,6 @@ func (s *SelectMaxNumberState) Display(ctx *core.AppContext, ui *core.UiContext)
 	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
 	ui.DisplayText(ui.GetLocalizedMsg(ui.GameLocalizer, "press_enter") + "\r\n")
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedMsg(ui.GameLocalizer, "current_value")+"\r\n", s.game.MaxNumber))
-	ui.DisplayText("> ")
 }
 func (s *SelectMaxNumberState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.MaxNumber, s.game.MinNumber, s.game.MaxRangeNumber)
@@ -148,7 +146,6 @@ func (g *GameState) Id() string {
 }
 func (g *GameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "attempts_left")+"\r\n", g.game.GetAttempts()))
-	ui.DisplayText("> ")
 }
 func (g *GameState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseIntInRange(input, g.game.MinNumber, g.game.MaxNumber)
@@ -232,7 +229,6 @@ func (s *SelectDifficultyMenuState) Display(ctx *core.AppContext, ui *core.UiCon
 	for d := VeryEasy; d <= VeryHard; d++ {
 		ui.DisplayText(fmt.Sprintf("%d. %s.\r\n", d, ui.GetLocalizedMsg(ui.GameLocalizer, d.String())))
 	}
-	ui.DisplayText("> ")
 }
 func (s *SelectDifficultyMenuState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseInt(input)

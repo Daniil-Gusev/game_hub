@@ -45,7 +45,6 @@ func (s *GameSelectionMenuState) Display(_ *core.AppContext, ui *core.UiContext)
 		ui.DisplayText(fmt.Sprintf("%d. %s.\r\n%s\r\n%s: %s.\r\n\r\n", i+1, name, desc, utils.Capitalize(ui.GetLocalizedMsg(ui.AppLocalizer, "author")), author))
 	}
 	ui.DisplayText(ui.GetLocalizedStateMsg(s, "make_your_choice") + "\r\n")
-	ui.DisplayText("> ")
 }
 
 func (s *GameSelectionMenuState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {

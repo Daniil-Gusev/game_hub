@@ -63,7 +63,6 @@ func (g *GameState) Id() string {
 
 func (g *GameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(ui.GetLocalizedStateMsg(g, "prompt") + "\r\n")
-	ui.DisplayText("> ")
 }
 
 func (g *GameState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {

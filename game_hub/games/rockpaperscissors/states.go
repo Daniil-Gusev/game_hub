@@ -69,7 +69,6 @@ func (g *GameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "score")+"\r\n", g.game.PlayerScore, g.game.BotScore))
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "current_round")+"\r\n", g.game.CurrentRound, g.game.TotalRounds))
 	ui.DisplayText(ui.GetLocalizedStateMsg(g, "prompt") + "\r\n")
-	ui.DisplayText("> ")
 }
 func (g *GameState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	option, err := ui.Validator.ParseInt(input)
@@ -139,7 +138,6 @@ func (s *SelectRoundsState) Id() string {
 func (s *SelectRoundsState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "current_value")+"\r\n", s.game.TotalRounds))
-	ui.DisplayText("> ")
 }
 func (s *SelectRoundsState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.TotalRounds, s.game.MinRounds, s.game.MaxRounds)

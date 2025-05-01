@@ -3,6 +3,7 @@ package core
 import (
 	"bufio"
 	"fmt"
+	"github.com/chzyer/readline"
 	"io"
 	"os"
 	"strings"
@@ -12,6 +13,7 @@ import (
 type Console interface {
 	Read() (string, error)
 	Write(string)
+	Close() error
 }
 
 // стандартный терминал
@@ -19,24 +21,67 @@ type StdConsole struct {
 	Reader *bufio.Scanner
 }
 
-func (c StdConsole) Read() (string, error) {
+func NewStdConsole() (*StdConsole, error) {
+	return &StdConsole{Reader: bufio.NewScanner(os.Stdin)}, nil
+}
+
+func (c *StdConsole) Read() (string, error) {
 	if c.Reader.Scan() {
 		return strings.TrimSpace(c.Reader.Text()), nil
 	}
 	err := c.Reader.Err()
 	if err == io.EOF {
-		return "", NewAppError(ErrEOF, "eof", nil)
+		return "", NewAppError(ErrEOF, "interrupt", nil)
 	}
 	if err != nil {
 		return "", NewAppError(ErrInternal, "read_error", map[string]any{
 			"error": fmt.Sprintf("%v", err),
 		})
 	}
-	return "", NewAppError(ErrEOF, "eof", nil)
+	return "", NewAppError(ErrEOF, "interrupt", nil)
 }
-func (c StdConsole) Write(s string) {
+
+func (c *StdConsole) Write(s string) {
 	os.Stdout.WriteString(s)
 }
-func NewStdConsole() *StdConsole {
-	return &StdConsole{Reader: bufio.NewScanner(os.Stdin)}
+
+type StdReadlineConsole struct {
+	rl *readline.Instance
+}
+
+func NewStdReadlineConsole() (*StdReadlineConsole, error) {
+	rl, err := readline.NewEx(&readline.Config{
+		Prompt:       "> ",
+		HistoryLimit: 200,
+	})
+	if err != nil {
+		return nil, NewAppError(ErrInit, "console_initialization_error", map[string]any{
+			"error": fmt.Sprintf("%v", err),
+		})
+	}
+	return &StdReadlineConsole{rl: rl}, nil
+}
+
+func (c *StdReadlineConsole) Read() (string, error) {
+	line, err := c.rl.Readline()
+	if err == readline.ErrInterrupt {
+		return "", NewAppError(ErrEOF, "interrupt", nil)
+	}
+	if err == io.EOF {
+		return "", NewAppError(ErrEOF, "interrupt", nil)
+	}
+	if err != nil {
+		return "", NewAppError(ErrInternal, "read_error", map[string]any{
+			"error": fmt.Sprintf("%v", err),
+		})
+	}
+	return strings.TrimSpace(line), nil
+}
+
+func (c *StdReadlineConsole) Write(s string) {
+	os.Stdout.WriteString(s)
+}
+
+func (c *StdReadlineConsole) Close() error {
+	return c.rl.Close()
 }

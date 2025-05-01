@@ -107,7 +107,6 @@ func (d *ConfirmationDialogState) Id() string {
 }
 func (d *ConfirmationDialogState) Display(_ *AppContext, ui *UiContext) {
 	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
-	ui.DisplayText("> ")
 }
 func (d *ConfirmationDialogState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
 	ui.Msg = ui.GetLocalizedStateMsg(d, "confirmation_prompt")
@@ -156,7 +155,6 @@ func (m *MenuState) Display(ctx *AppContext, ui *UiContext) {
 		ui.DisplayText(fmt.Sprintf("%d. %s\r\n", option.Id, desc))
 	}
 	ui.DisplayText(ui.GetLocalizedStateMsg(m, "make_your_choice") + "\r\n")
-	ui.DisplayText("> ")
 }
 func (m *MenuState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
 	num, err := ui.Validator.ParseInt(input)

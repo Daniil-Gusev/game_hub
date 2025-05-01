@@ -16,6 +16,7 @@ const (
 	ErrStateStack             = "STATE_STACK_ERROR"
 	ErrLocalization           = "LOCALIZATION_ERROR"
 	ErrCommand                = "COMMAND_ERROR"
+	ErrInit         ErrorCode = "initialization_error"
 	ErrInternal     ErrorCode = "INTERNAL_ERROR"
 )
 
