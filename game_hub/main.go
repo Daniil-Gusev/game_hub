@@ -6,8 +6,6 @@ import (
 	"game_hub/config"
 	"game_hub/core"
 	"game_hub/games"
-	"os"
-	"os/signal"
 )
 
 func main() {
@@ -40,6 +38,7 @@ func main() {
 		StateStack:   core.NewStateStack(),
 		Game:         nil,
 		AppIsRunning: true,
+		GoToMenu:     false,
 	}
 	lm.SetLanguage(appCtx.Config.Language.CurrentLanguage)
 	if err := uiCtx.AppLocalizer.LoadTranslations(appCtx.Config.Paths.CoreTranslationsPath()); err != nil {
@@ -71,20 +70,6 @@ func main() {
 		uiCtx.DisplayError(err)
 	}
 
-	sigChan := make(chan os.Signal, 1)
-	signal.Notify(sigChan, os.Interrupt)
-	go func() {
-		<-sigChan
-		uiCtx.Console.Write("\r\n")
-		currentState = &core.ExitState{}
-		if _, err := currentState.Init(appCtx, uiCtx); err != nil {
-			uiCtx.DisplayError(err)
-		}
-		currentState.Display(appCtx, uiCtx)
-		currentState.Handle(appCtx, uiCtx, "")
-		os.Exit(0)
-	}()
-
 	for appCtx.AppIsRunning {
 		currentState.Display(appCtx, uiCtx)
 		input, inputErr := "", error(nil)
@@ -108,7 +93,7 @@ func main() {
 			appCtx.StateStack.Push(currentState)
 			currentState.Display(appCtx, uiCtx)
 		}
-		if _, ok := currentState.(*core.GameExitState); ok {
+		if appCtx.GoToMenu {
 			currentState = startState
 			appCtx.StateStack.Clear()
 			appCtx.StateStack.Push(currentState)
@@ -119,6 +104,7 @@ func main() {
 			if err := uiCtx.CommandRegistry.RegisterLocalCommands(currentState.GetCommands()); err != nil {
 				uiCtx.DisplayError(err)
 			}
+			appCtx.GoToMenu = false
 			continue
 		}
 		if nextState != currentState {

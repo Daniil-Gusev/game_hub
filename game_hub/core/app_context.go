@@ -9,6 +9,7 @@ type AppContext struct {
 	Game         GameInterface
 	StateStack   *StateStack
 	AppIsRunning bool
+	GoToMenu     bool
 }
 
 func (app *AppContext) GetCurrentState() (State, error) {

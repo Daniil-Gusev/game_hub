@@ -88,11 +88,10 @@ func (e *GameExitState) Id() string {
 func (e *GameExitState) RequiresInput() bool {
 	return false
 }
-func (e *GameExitState) Display(_ *AppContext, ui *UiContext) {}
 
-// служебное, возвращает в меню выбора игр в основном цикле
 func (e *GameExitState) Handle(ctx *AppContext, ui *UiContext, _ string) (State, error) {
 	ui.GameLocalizer = NewMessageLocalizer(ui.LocalizationManager)
+	ctx.GoToMenu = true
 	return e, nil
 }
 

@@ -3,6 +3,10 @@
     "en": "Game Hub Version: %s, Built: %s.",
     "ru": "Game Hub Версия: %s, Собрано: %s."
   },
+  "console_initialization_error": {
+    "en": "Failed to initialize console: $error",
+    "ru": "Не удалось инициализировать консоль: $error"
+  },
   "invalid_input": {
     "en": "You must enter an integer.",
     "ru": "Необходимо ввести целое число."
@@ -23,9 +27,9 @@
     "en": "Invalid range from $min to $max.",
     "ru": "Некорректный диапазон от $min до $max."
   },
-  "eof": {
-    "en": "The program has been terminated at your request.",
-    "ru": "Программа завершена по вашему запросу."
+  "interrupt": {
+    "en": "The program has been terminated.",
+    "ru": "Программа завершена."
   },
   "getting_gamedata_error": {
     "en": "Failed to get game data.",
