@@ -1,26 +1,6 @@
 {
-  "author": {
-    "en": "author",
-    "ru": "автор"
+  "meta": {
+    "supported_languages": ["en", "ru"]
   },
-  "welcome": {
-    "en": "Welcome to Game Hub!",
-    "ru": "Добро пожаловать в Game Hub!"
-  },
-  "exit_option": {
-    "en": "Exit",
-    "ru": "Выход"
-  },
-  "available_games": {
-    "en": "Available games:",
-    "ru": "Доступные игры:"
-  },
-  "game_selection_menu_desc": {
-    "en": "You are in the main menu of the Game Hub. Select the desired game from the list by entering its number. Good luck!",
-    "ru": "Вы находитесь в главном меню игрового центра. Выберите желаемую игру из списка и введите её номер. Желаем удачи!"
-  },
-  "game_welcome": {
-    "en": "Welcome to the game \"%s\". Good luck!",
-    "ru": "Добро пожаловать в игру \"%s\". Желаем удачи!"
-  }
+  "translations": {}
 }

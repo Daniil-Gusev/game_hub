@@ -1,30 +1,35 @@
 {
-  "game": {
-    "main_menu": {
-      "description": {
-        "en": "You are in the main menu of the game. Choose an option.",
-        "ru": "Вы в главном меню игры. Выберите опцию."
-      },
-      "messages": {
-        "exit_option": {
-          "en": "Exit",
-          "ru": "Выйти"
-        },
-        "start_game": {
-          "en": "Start game",
-          "ru": "Начать игру"
-        }
-      }
-    },
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
     "game": {
-      "description": {
-        "en": "You are playing the game. Follow the instructions.",
-        "ru": "Вы играете в игру. Следуйте инструкциям."
+      "main_menu": {
+        "description": {
+          "en": "You are in the main menu of the game. Choose an option.",
+          "ru": "Вы в главном меню игры. Выберите опцию."
+        },
+        "messages": {
+          "exit_option": {
+            "en": "Exit",
+            "ru": "Выйти"
+          },
+          "start_game": {
+            "en": "Start game",
+            "ru": "Начать игру"
+          }
+        }
       },
-      "messages": {
-        "prompt": {
-          "en": "Enter your action.",
-          "ru": "Введите ваше действие."
+      "game": {
+        "description": {
+          "en": "You are playing the game. Follow the instructions.",
+          "ru": "Вы играете в игру. Следуйте инструкциям."
+        },
+        "messages": {
+          "prompt": {
+            "en": "Enter your action.",
+            "ru": "Введите ваше действие."
+          }
         }
       }
     }

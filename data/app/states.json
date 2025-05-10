@@ -1,30 +1,79 @@
 {
-  "app": {
-    "game_selection_menu": {
-      "description": {
-        "en": "You are in the main menu of the Game Hub. Select the desired game from the list by entering its number. Good luck!",
-        "ru": "Вы находитесь в главном меню игрового центра. Выберите желаемую игру из списка, введя её номер. Удачи!"
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
+    "app": {
+      "main_menu": {
+        "messages": {
+          "exit_option": {
+            "en": "Exit",
+            "ru": "Выход"
+          },
+          "play_option": {
+            "en": "Play",
+            "ru": "Играть"
+          },
+          "change_language_option": {
+            "en": "Change language",
+            "ru": "Сменить язык"
+          }
+        }
       },
-      "messages": {
-        "welcome": {
-          "en": "Welcome to Game Hub!",
-          "ru": "Добро пожаловать в Game Hub!"
+      "game_selection_menu": {
+        "description": {
+          "en": "You are in the main menu of the Game Hub. Select the desired game from the list by entering its number. Good luck!",
+          "ru": "Вы находитесь в главном меню игрового центра. Выберите желаемую игру из списка, введя её номер. Удачи!"
         },
-        "make_your_choice": {
-          "en": "Make your choice.",
-          "ru": "Сделайте ваш выбор."
+        "messages": {
+          "welcome": {
+            "en": "Welcome to Game Hub!",
+            "ru": "Добро пожаловать в Game Hub!"
+          },
+          "make_your_choice": {
+            "en": "Make your choice.",
+            "ru": "Сделайте ваш выбор."
+          },
+          "invalid_option": {
+            "en": "There is no such item in the menu.",
+            "ru": "В меню нет выбранного вами пункта."
+          },
+          "exit_option": {
+            "en": "Exit",
+            "ru": "Выход"
+          },
+          "available_games": {
+            "en": "Available games:",
+            "ru": "Доступные игры:"
+          },
+          "author": {
+            "en": "author",
+            "ru": "автор"
+          }
+        }
+      },
+      "language_selection_menu": {
+        "description": {
+          "en": "You are in the language selection menu. Enter the code of the language you wish to select, or \"back\" to cancel.",
+          "ru": "Вы находитесь в меню выбора языка. Введите код того языка, который желаете выбрать, или \"назад\" для отмены."
         },
-        "invalid_option": {
-          "en": "There is no such item in the menu.",
-          "ru": "В меню нет выбранного вами пункта."
-        },
-        "exit_option": {
-          "en": "Exit",
-          "ru": "Выход"
-        },
-        "available_games": {
-          "en": "Available games:",
-          "ru": "Доступные игры:"
+        "messages": {
+          "available_languages": {
+            "en": "The following languages are available to you:",
+            "ru": "Вам доступны следующие языки:"
+          },
+          "prompt": {
+            "en": "Enter the code of the language you wish to select.",
+            "ru": "Введите код того языка, который желаете выбрать."
+          },
+          "selected": {
+            "en": "Selected language: %s.",
+            "ru": "Выбран язык: %s."
+          },
+          "invalid_input": {
+            "en": "There is no such language in the list.",
+            "ru": "В списке нет такого языка."
+          }
         }
       }
     }

@@ -1,17 +1,22 @@
 {
-  "game": {
-    "restart": {
-      "name": {
-        "en": "restart",
-        "ru": "перезапуск"
-      },
-      "description": {
-        "en": "Restarts the current game.",
-        "ru": "Начинает текущую игру сначала."
-      },
-      "aliases": {
-        "en": ["retry", "reset"],
-        "ru": ["заново", "перезапустить"]
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
+    "game": {
+      "restart": {
+        "name": {
+          "en": "restart",
+          "ru": "перезапуск"
+        },
+        "description": {
+          "en": "Restarts the current game.",
+          "ru": "Начинает текущую игру сначала."
+        },
+        "aliases": {
+          "en": ["retry", "reset"],
+          "ru": ["заново", "перезапустить"]
+        }
       }
     }
   }

@@ -1,106 +1,111 @@
 {
-  "game": {
-    "main_menu": {
-      "description": {
-        "en": "You are in the main menu of Rock, Paper, Scissors. Choose an option.",
-        "ru": "Вы в главном меню игры 'Камень, ножницы, бумага'. Выберите опцию."
-      },
-      "messages": {
-        "exit_option": {
-          "en": "Exit.",
-          "ru": "Выход."
-        },
-        "start_game": {
-          "en": "Start game (rounds: $rounds).",
-          "ru": "Начать игру (раундов: $rounds)."
-        },
-        "select_rounds": {
-          "en": "Select number of rounds.",
-          "ru": "Выбрать количество раундов."
-        }
-      }
-    },
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
     "game": {
-      "description": {
-        "en": "You need to choose the sign you want to show your opponent.\nThe winner is the one who scores the most points in the agreed number of rounds.",
-        "ru": "Вам необходимо выбрать тот знак, который вы желаете показать своему сопернику.\nПобедителем будет считаться тот, кто наберёт наибольшее количество очков за оговоренное количество раундов."
-      },
-      "messages": {
-        "score": {
-          "en": "You: %d, Opponent: %d.",
-          "ru": "Вы: %d, Ваш соперник: %d."
+      "main_menu": {
+        "description": {
+          "en": "You are in the main menu of Rock, Paper, Scissors. Choose an option.",
+          "ru": "Вы в главном меню игры 'Камень, ножницы, бумага'. Выберите опцию."
         },
-        "current_round": {
-          "en": "Round %d/%d!",
-          "ru": "Раунд %d/%d!"
-        },
-        "prompt": {
-          "en": "Choose your move:\n1. Rock.\n2. Scissors.\n3. Paper.",
-          "ru": "Выберите ваш ход:\n1. Камень.\n2. Ножницы.\n3. Бумага."
-        },
-        "moves_info": {
-          "en": "You played: %s.\nYour opponent played: %s.",
-          "ru": "У вас: %s.\nУ вашего соперника: %s."
-        },
-        "invalid_option": {
-          "en": "There is no such item in the menu.",
-          "ru": "В меню нет выбранного вами пункта."
-        },
-        "round_win": {
-          "en": "You win this round!",
-          "ru": "Вы побеждаете в этом раунде!"
-        },
-        "round_loss": {
-          "en": "Your opponent wins this round.",
-          "ru": "В этом раунде побеждает ваш соперник."
-        },
-        "round_draw": {
-          "en": "You have a draw in this round.",
-          "ru": "В этом раунде у вас ничья."
+        "messages": {
+          "exit_option": {
+            "en": "Exit.",
+            "ru": "Выход."
+          },
+          "start_game": {
+            "en": "Start game (rounds: $rounds).",
+            "ru": "Начать игру (раундов: $rounds)."
+          },
+          "select_rounds": {
+            "en": "Select number of rounds.",
+            "ru": "Выбрать количество раундов."
+          }
         }
-      }
-    },
-    "end_game": {
-      "description": {
-        "en": "The game has ended. Check the results!",
-        "ru": "Игра окончена. Проверьте результаты!"
       },
-      "messages": {
-        "score": {
-          "en": "You: %d, Opponent: %d.",
-          "ru": "Вы: %d, ваш соперник: %d."
+      "game": {
+        "description": {
+          "en": "You need to choose the sign you want to show your opponent.\nThe winner is the one who scores the most points in the agreed number of rounds.",
+          "ru": "Вам необходимо выбрать тот знак, который вы желаете показать своему сопернику.\nПобедителем будет считаться тот, кто наберёт наибольшее количество очков за оговоренное количество раундов."
         },
-        "win": {
-          "en": "Congratulations, you won!!!",
-          "ru": "Поздравляем, вы выиграли!!!"
-        },
-        "loss": {
-          "en": "Unfortunately, you lost...\nMaybe next time?",
-          "ru": "К сожалению, вы проиграли...\nМожет, в следующий раз повезёт?"
-        },
-        "draw": {
-          "en": "It's a draw this time.",
-          "ru": "На этот раз у вас ничья."
+        "messages": {
+          "score": {
+            "en": "You: %d, Opponent: %d.",
+            "ru": "Вы: %d, Ваш соперник: %d."
+          },
+          "current_round": {
+            "en": "Round %d/%d!",
+            "ru": "Раунд %d/%d!"
+          },
+          "prompt": {
+            "en": "Choose your move:\n1. Rock.\n2. Scissors.\n3. Paper.",
+            "ru": "Выберите ваш ход:\n1. Камень.\n2. Ножницы.\n3. Бумага."
+          },
+          "moves_info": {
+            "en": "You played: %s.\nYour opponent played: %s.",
+            "ru": "У вас: %s.\nУ вашего соперника: %s."
+          },
+          "invalid_option": {
+            "en": "There is no such item in the menu.",
+            "ru": "В меню нет выбранного вами пункта."
+          },
+          "round_win": {
+            "en": "You win this round!",
+            "ru": "Вы побеждаете в этом раунде!"
+          },
+          "round_loss": {
+            "en": "Your opponent wins this round.",
+            "ru": "В этом раунде побеждает ваш соперник."
+          },
+          "round_draw": {
+            "en": "You have a draw in this round.",
+            "ru": "В этом раунде у вас ничья."
+          }
         }
-      }
-    },
-    "select_rounds": {
-      "description": {
-        "en": "You need to specify the number of rounds you want to play.",
-        "ru": "Вам необходимо указать количество раундов, которое вы хотите сыграть."
       },
-      "messages": {
-        "prompt": {
-          "en": "Enter a positive number corresponding to the number of rounds you have chosen.",
-          "ru": "Введите положительное число, соответствующее выбранному вами количеству раундов."
+      "end_game": {
+        "description": {
+          "en": "The game has ended. Check the results!",
+          "ru": "Игра окончена. Проверьте результаты!"
         },
-        "current_value": {
-          "en": "Current value: %d.",
-          "ru": "Текущее значение: %d."
+        "messages": {
+          "score": {
+            "en": "You: %d, Opponent: %d.",
+            "ru": "Вы: %d, ваш соперник: %d."
+          },
+          "win": {
+            "en": "Congratulations, you won!!!",
+            "ru": "Поздравляем, вы выиграли!!!"
+          },
+          "loss": {
+            "en": "Unfortunately, you lost...\nMaybe next time?",
+            "ru": "К сожалению, вы проиграли...\nМожет, в следующий раз повезёт?"
+          },
+          "draw": {
+            "en": "It's a draw this time.",
+            "ru": "На этот раз у вас ничья."
+          }
+        }
+      },
+      "select_rounds": {
+        "description": {
+          "en": "You need to specify the number of rounds you want to play.",
+          "ru": "Вам необходимо указать количество раундов, которое вы хотите сыграть."
         },
-        "selected": {
-          "en": "Number of rounds selected: %d.",
-          "ru": "Выбрано раундов до конца игры: %d."
+        "messages": {
+          "prompt": {
+            "en": "Enter a positive number corresponding to the number of rounds you have chosen.",
+            "ru": "Введите положительное число, соответствующее выбранному вами количеству раундов."
+          },
+          "current_value": {
+            "en": "Current value: %d.",
+            "ru": "Текущее значение: %d."
+          },
+          "selected": {
+            "en": "Number of rounds selected: %d.",
+            "ru": "Выбрано раундов до конца игры: %d."
+          }
         }
       }
     }

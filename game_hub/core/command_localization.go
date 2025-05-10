@@ -10,6 +10,40 @@ type CommandTranslation struct {
 	Aliases     map[string][]string `json:"aliases"`
 }
 
+func (c CommandTranslation) isLocalized(langs []string) error {
+	for _, supportedLang := range langs {
+		if _, exists := c.Name[supportedLang]; exists {
+			continue
+		}
+		return NewAppError(Err, "key_not_found", map[string]any{
+			"key": fmt.Sprintf("Name.%s", supportedLang),
+		})
+	}
+	for _, supportedLang := range langs {
+		if len(c.Description) == 0 {
+			break
+		}
+		if _, exists := c.Description[supportedLang]; exists {
+			continue
+		}
+		return NewAppError(Err, "key_not_found", map[string]any{
+			"key": fmt.Sprintf("description.%s", supportedLang),
+		})
+	}
+	for _, supportedLang := range langs {
+		if len(c.Aliases) == 0 {
+			break
+		}
+		if _, exists := c.Aliases[supportedLang]; exists {
+			continue
+		}
+		return NewAppError(Err, "key_not_found", map[string]any{
+			"key": fmt.Sprintf("aliases.%s", supportedLang),
+		})
+	}
+	return nil
+}
+
 func NewCommandTranslation() CommandTranslation {
 	return CommandTranslation{
 		Name:        make(map[string]string),
@@ -19,6 +53,11 @@ func NewCommandTranslation() CommandTranslation {
 }
 
 type CommandTranslations map[Scope]map[string]CommandTranslation
+
+type CommandLocalizationData struct {
+	Meta         LocalizationMetadata `json:"meta"`
+	Translations CommandTranslations  `json:"translations"`
+}
 
 type CommandLocalizer struct {
 	lm           *LocalizationManager
@@ -33,11 +72,12 @@ func NewCommandLocalizer(lm *LocalizationManager) *CommandLocalizer {
 }
 
 func (l *CommandLocalizer) LoadTranslations(filePath string) error {
-	var rawData CommandTranslations
-	if err := l.lm.loadRawData(filePath, &rawData); err != nil {
+	var rawData CommandLocalizationData
+	if err := l.lm.loadLocalizationData(filePath, &rawData); err != nil {
 		return err
 	}
-	for scope, cmds := range rawData {
+	supportedLanguages := rawData.Meta.SupportedLanguages
+	for scope, cmds := range rawData.Translations {
 		if !scope.IsValid() {
 			return NewAppError(ErrLocalization, "invalid_command_localizations_scope", map[string]any{
 				"file":  filePath,
@@ -49,8 +89,12 @@ func (l *CommandLocalizer) LoadTranslations(filePath string) error {
 		}
 		for cmdId, trans := range cmds {
 			if len(trans.Name) == 0 {
-				return NewAppError(ErrLocalization, "key_not_found", map[string]any{
-					"key": fmt.Sprintf("%s.name", cmdId),
+				return NewAppError(ErrLocalization, "localization_file_translations_error", map[string]any{
+					"file": filePath,
+					"path": fmt.Sprintf("translations.%v.%s", scope, cmdId),
+					"error": NewAppError(ErrLocalization, "key_not_found", map[string]any{
+						"key": fmt.Sprintf("%s.name", cmdId),
+					}),
 				})
 				continue
 			}
@@ -60,8 +104,23 @@ func (l *CommandLocalizer) LoadTranslations(filePath string) error {
 			if trans.Aliases == nil {
 				trans.Aliases = make(map[string][]string)
 			}
+			err := trans.isLocalized(supportedLanguages)
+			if err != nil {
+				locErr := NewAppError(ErrLocalization, "localization_file_translations_error", map[string]any{
+					"file":  filePath,
+					"path":  fmt.Sprintf("translations.%v.%s", scope, cmdId),
+					"error": err,
+				})
+				if l.lm.isCoreLocalization(filePath) {
+					return locErr
+				}
+				l.lm.logError(locErr)
+			}
 			l.Translations[scope][cmdId] = trans
 		}
+	}
+	if l.lm.isCoreLocalization(filePath) {
+		l.lm.updateAvailableLanguages(supportedLanguages)
 	}
 	return nil
 }
@@ -76,7 +135,7 @@ func (l *CommandLocalizer) GetName(scope Scope, cmdId string) (string, error) {
 	trans, cmdExists := cmds[cmdId]
 	if !cmdExists {
 		return "", NewAppError(ErrLocalization, "command_localization_not_found", map[string]any{
-			"key": fmt.Sprintf("%s.%s", scope, cmdId),
+			"command": fmt.Sprintf("%s.%s", scope, cmdId),
 		})
 	}
 	return fetchTranslation(l.lm, trans.Name)
@@ -91,8 +150,8 @@ func (l *CommandLocalizer) GetDescription(scope Scope, cmdId string) (string, er
 	}
 	trans, cmdExists := cmds[cmdId]
 	if !cmdExists {
-		return "", NewAppError(ErrLocalization, "key_not_found", map[string]any{
-			"key": fmt.Sprintf("%s.%s", scope, cmdId),
+		return "", NewAppError(ErrLocalization, "command_localization_not_found", map[string]any{
+			"command": fmt.Sprintf("%s.%s", scope, cmdId),
 		})
 	}
 	return fetchTranslation(l.lm, trans.Description)
@@ -108,8 +167,8 @@ func (l *CommandLocalizer) GetAliases(scope Scope, cmdId string) ([]string, erro
 
 	trans, cmdExists := cmds[cmdId]
 	if !cmdExists {
-		return nil, NewAppError(ErrLocalization, "key_not_found", map[string]any{
-			"key": fmt.Sprintf("%s.%s", scope, cmdId),
+		return nil, NewAppError(ErrLocalization, "command_localization_not_found", map[string]any{
+			"command": fmt.Sprintf("%s.%s", scope, cmdId),
 		})
 	}
 

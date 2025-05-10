@@ -108,7 +108,7 @@ func (d *ConfirmationDialogState) Display(_ *AppContext, ui *UiContext) {
 	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
 }
 func (d *ConfirmationDialogState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
-	ui.Msg = ui.GetLocalizedStateMsg(d, "confirmation_prompt")
+	ui.Msg = ui.GetLocalizedStateMsg(d, "confirmation_prompt") + "\r\n"
 	return d, nil
 }
 func (d *ConfirmationDialogState) GetCommands() []Command {

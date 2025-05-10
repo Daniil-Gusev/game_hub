@@ -1,110 +1,151 @@
 {
-  "version_info": {
-    "en": "Game Hub Version: %s, Built: %s.",
-    "ru": "Game Hub Версия: %s, Собрано: %s."
+  "meta": {
+    "supported_languages": ["en", "ru"]
   },
-  "console_initialization_error": {
-    "en": "Failed to initialize console: $error",
-    "ru": "Не удалось инициализировать консоль: $error"
-  },
-  "invalid_input": {
-    "en": "You must enter an integer.",
-    "ru": "Необходимо ввести целое число."
-  },
-  "out_of_range_generic": {
-    "en": "The provided value is out of acceptable bounds.",
-    "ru": "Предложенное значение выходит за допустимые пределы."
-  },
-  "out_of_range_min": {
-    "en": "The provided number must not be less than $min.",
-    "ru": "Предложенное число не должно быть меньше $min."
-  },
-  "out_of_range_max": {
-    "en": "The provided number must not exceed $max.",
-    "ru": "Предложенное число не должно превышать $max."
-  },
-  "invalid_range": {
-    "en": "Invalid range from $min to $max.",
-    "ru": "Некорректный диапазон от $min до $max."
-  },
-  "interrupt": {
-    "en": "The program has been terminated.",
-    "ru": "Программа завершена."
-  },
-  "getting_gamedata_error": {
-    "en": "Failed to get game data.",
-    "ru": "Не удалось получить игровые данные."
-  },
-  "localization_error": {
-    "en": "Localization error",
-    "ru": "Ошибка локализации"
-  },
-  "unknown_error": {
-    "en": "Unknown error",
-    "ru": "Неизвестная ошибка"
-  },
-  "error": {
-    "en": "error: $error",
-    "ru": "Ошибка: $error"
-  },
-  "read_error": {
-    "en": "Read error: $error",
-    "ru": "Ошибка чтения: $error"
-  },
-  "state_stack_empty": {
-    "en": "The state stack is empty",
-    "ru": "Стэк состояний пуст"
-  },
-  "state_stack_insufficient": {
-    "en": "There are not enough elements in the state stack",
-    "ru": "В стэке состояний недостаточно элементов"
-  },
-  "lang_not_supported": {
-    "en": "Language \"$lang\" is not supported",
-    "ru": "Язык '$lang' не поддерживается"
-  },
-  "key_not_found": {
-    "en": "No message found for key \"$key\".",
-    "ru": "Не найдено сообщение для ключа \"$key\"."
-  },
-  "set_not_found": {
-    "en": "Message set \"$set\" not found.",
-    "ru": "Не найден набор сообщений \"$set\"."
-  },
-  "key_in_set_not_found": {
-    "en": "No message found for key \"$key\" in set \"$set\".",
-    "ru": "Не найдено сообщение для ключа \"$key\" в наборе \"$set\"."
-  },
-  "file_open_error": {
-    "en": "Failed to open translations file \"$file\": $error",
-    "ru": "Не удалось открыть файл переводов \"$file\": $error"
-  },
-  "file_parse_error": {
-    "en": "Error parsing translations file \"$file\": $error",
-    "ru": "Ошибка парсинга файла переводов \"$file\": $error"
-  },
-  "internal_error": {
-    "en": "Internal error",
-    "ru": "Внутренняя ошибка"
-  },
-  "confirmation_default": {
-    "en": "Are you sure?",
-    "ru": "Вы уверены?"
-  },
-  "quit_confirm": {
-    "en": "Are you sure you want to immediately terminate the program?",
-    "ru": "Вы уверены, что хотите немедленно завершить программу?"
-  },
-  "help_not_found": {
-    "en": "Help for this state was not found.",
-    "ru": "Справка для данного состояния не найдена."
-  },
-  "command_localization_not_found": {
-    "en": "No suitable translation found for the command $cmd.",
-    "ru": "Не найдено подходящего перевода для команды $cmd."
-  },
-  "available_commands": {
-    "en": "The following commands are available to you:",
-    "ru": "Вам доступны следующие команды:"
+  "translations": {
+    "version_info": {
+      "en": "Game Hub Version: %s, Built: %s.",
+      "ru": "Game Hub Версия: %s, Собрано: %s."
+    },
+    "invalid_number_input": {
+      "en": "You must enter an integer.",
+      "ru": "Необходимо ввести целое число."
+    },
+    "out_of_range_generic": {
+      "en": "The provided value is out of acceptable bounds.",
+      "ru": "Предложенное значение выходит за допустимые пределы."
+    },
+    "out_of_range_min": {
+      "en": "The provided number must not be less than $min.",
+      "ru": "Предложенное число не должно быть меньше $min."
+    },
+    "out_of_range_max": {
+      "en": "The provided number must not exceed $max.",
+      "ru": "Предложенное число не должно превышать $max."
+    },
+    "invalid_range": {
+      "en": "Invalid range from $min to $max.",
+      "ru": "Некорректный диапазон от $min до $max."
+    },
+    "interrupt": {
+      "en": "The program has been terminated.",
+      "ru": "Программа завершена."
+    },
+    "getting_gamedata_error": {
+      "en": "Failed to get game data.",
+      "ru": "Не удалось получить игровые данные."
+    },
+    "localization_error": {
+      "en": "Localization error",
+      "ru": "Ошибка локализации"
+    },
+    "invalid_localization_metadata": {
+      "en": "Invalid localization metadata in file $file: $error",
+      "ru": "Некорректные методанные в файле локализации $file: $error"
+    },
+    "localization_metadata_invalid_language": {
+      "en": "unknown language code \"$lang\" specified",
+      "ru": "указан неизвестный языковой код \"$lang\""
+    },
+    "localization_meta_missing_dedefaultlang": {
+      "en": "The localization file does not support the language \"$lang\" selected as the default language.",
+      "ru": "Файл локализации не поддерживает язык \"$lang\", выбранный как язык по умолчанию."
+    },
+    "localization_meta_missing_decurrentlang": {
+      "en": "The localization file does not support the language \"$lang\" selected as the current language.",
+      "ru": "Файл локализации не поддерживает язык \"$lang\", выбранный как текущий язык."
+    },
+    "localization_metadata_missing_languages": {
+      "en": "The localization metadata does not contain a list of supported languages.",
+      "ru": "В метаданных локализации отсутствует список поддерживаемых языков."
+    },
+    "message_localization_failure": {
+      "en": "Failed to localize for message $message. Error: $error",
+      "ru": "Не удалось локализовать сообщение $message. Ошибка: $error"
+    },
+    "state_localization_not_found": {
+      "en": "No translations found for state $state.",
+      "ru": "Не найдено переводов для состояния $state."
+    },
+    "command_localization_not_found": {
+      "en": "No translations found for command $command.",
+      "ru": "Не найдено переводов для команды $command."
+    },
+    "unknown_error": {
+      "en": "Unknown error",
+      "ru": "Неизвестная ошибка"
+    },
+    "error": {
+      "en": "error: $error",
+      "ru": "Ошибка: $error"
+    },
+    "read_error": {
+      "en": "Read error: $error",
+      "ru": "Ошибка чтения: $error"
+    },
+    "state_stack_empty": {
+      "en": "The state stack is empty",
+      "ru": "Стэк состояний пуст"
+    },
+    "state_stack_insufficient": {
+      "en": "There are not enough elements in the state stack",
+      "ru": "В стэке состояний недостаточно элементов"
+    },
+    "lang_not_supported": {
+      "en": "Language \"$lang\" is not supported",
+      "ru": "Язык '$lang' не поддерживается"
+    },
+    "key_not_found": {
+      "en": "No message found for key \"$key\".",
+      "ru": "Не найдено сообщение для ключа \"$key\"."
+    },
+    "set_not_found": {
+      "en": "Message set \"$set\" not found.",
+      "ru": "Не найден набор сообщений \"$set\"."
+    },
+    "file_open_error": {
+      "en": "Failed to open translations file \"$file\": $error",
+      "ru": "Не удалось открыть файл переводов \"$file\": $error"
+    },
+    "file_parse_error": {
+      "en": "Error parsing file \"$file\": $error",
+      "ru": "Ошибка парсинга файла \"$file\": $error"
+    },
+    "localization_file_translations_error": {
+      "en": "in file $file on path $path: $error",
+      "ru": "в файле $file по пути $path: $error"
+    },
+    "localization_file_error": {
+      "en": "in localization file $file: $error",
+      "ru": "в файле локализации $file: $error"
+    },
+    "decode_error": {
+      "en": "Decoding error: $error",
+      "ru": "Ошибка декодирования: $error"
+    },
+    "internal_error": {
+      "en": "Internal error",
+      "ru": "Внутренняя ошибка"
+    },
+    "confirmation_default": {
+      "en": "Are you sure?",
+      "ru": "Вы уверены?"
+    },
+    "quit_confirm": {
+      "en": "Are you sure you want to immediately terminate the program?",
+      "ru": "Вы уверены, что хотите немедленно завершить программу?"
+    },
+    "help_not_found": {
+      "en": "Help for this state was not found.",
+      "ru": "Справка для данного состояния не найдена."
+    },
+    "command_localization_not_found": {
+      "en": "No suitable translation found for the command $cmd.",
+      "ru": "Не найдено подходящего перевода для команды $cmd."
+    },
+    "available_commands": {
+      "en": "The following commands are available to you:",
+      "ru": "Вам доступны следующие команды:"
+    }
   }
 }

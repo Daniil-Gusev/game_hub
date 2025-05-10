@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 // PathConfig manages paths to configuration files.
@@ -86,6 +87,14 @@ func (pc *PathConfig) CoreGlobalCommandsPath() string {
 // CoreLocalCommandsPath returns the path to local_commands.json in core.
 func (pc *PathConfig) CoreLocalCommandsPath() string {
 	return filepath.Join(pc.baseDir, "core", "local_commands.json")
+}
+
+func (pc *PathConfig) CoreLanguagesPath() string {
+	return filepath.Join(pc.baseDir, "core", "languages.json")
+}
+
+func (pc *PathConfig) IsCorePath(filePath string) bool {
+	return strings.HasPrefix(filePath, filepath.Join(pc.baseDir, "core"))
 }
 
 // AppTranslationsPath returns the path to translations.json in app.

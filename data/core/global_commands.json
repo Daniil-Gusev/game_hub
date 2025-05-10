@@ -1,52 +1,57 @@
 {
-  "core": {
-    "unknown": {
-      "name": {
-        "en": "unknown",
-        "ru": "неизвестно"
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
+    "core": {
+      "unknown": {
+        "name": {
+          "en": "unknown",
+          "ru": "неизвестно"
+        },
+        "description": {
+          "en": "Unknown command.",
+          "ru": "Неизвестная команда."
+        },
+        "aliases": {}
       },
-      "description": {
-        "en": "Unknown command.",
-        "ru": "Неизвестная команда."
+      "quit": {
+        "name": {
+          "en": "quit",
+          "ru": "конец"
+        },
+        "description": {
+          "en": "Immediately terminates the program.",
+          "ru": "Немедленно завершает программу."
+        },
+        "aliases": {
+          "en": ["exit", "terminate"],
+          "ru": ["выйти"]
+        }
       },
-      "aliases": {}
-    },
-    "quit": {
-      "name": {
-        "en": "quit",
-        "ru": "конец"
+      "help": {
+        "name": {
+          "en": "help",
+          "ru": "помощь"
+        },
+        "description": {
+          "en": "Displays help information.",
+          "ru": "Отображает справочную информацию."
+        },
+        "aliases": {
+          "en": ["?", "info"],
+          "ru": ["?", "справка", "информация"]
+        }
       },
-      "description": {
-        "en": "Immediately terminates the program.",
-        "ru": "Немедленно завершает программу."
-      },
-      "aliases": {
-        "en": ["exit", "terminate"],
-        "ru": ["выйти"]
-      }
-    },
-    "help": {
-      "name": {
-        "en": "help",
-        "ru": "помощь"
-      },
-      "description": {
-        "en": "Displays help information.",
-        "ru": "Отображает справочную информацию."
-      },
-      "aliases": {
-        "en": ["?", "info"],
-        "ru": ["?", "справка", "информация"]
-      }
-    },
-    "version": {
-      "name": {
-        "en": "version",
-        "ru": "версия"
-      },
-      "description": {
-        "en": "Displays the current version of the application.",
-        "ru": "Показывает текущую версию приложения."
+      "version": {
+        "name": {
+          "en": "version",
+          "ru": "версия"
+        },
+        "description": {
+          "en": "Displays the current version of the application.",
+          "ru": "Показывает текущую версию приложения."
+        }
       }
     }
   }

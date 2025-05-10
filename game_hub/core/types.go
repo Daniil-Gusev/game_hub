@@ -16,3 +16,5 @@ func (s Scope) IsValid() bool {
 		return false
 	}
 }
+
+type void struct{}

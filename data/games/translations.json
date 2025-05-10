@@ -1,4 +1,8 @@
 {
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
   "guessnumber": {
     "name": {
       "en": "Guess the Number",
@@ -27,4 +31,5 @@
       "ru": "Даниил Гусев"
     }
   }
+}
 }

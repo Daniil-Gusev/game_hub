@@ -1,146 +1,151 @@
 {
-  "game": {
-    "main_menu": {
-      "description": {
-        "en": "You are in the main menu of Guess the Number. Select an option to start the game or adjust settings.",
-        "ru": "Вы в главном меню игры 'Угадай число'. Выберите опцию, чтобы начать игру или настроить параметры."
-      },
-      "messages": {
-        "exit_option": {
-          "en": "Exit",
-          "ru": "Выйти"
-        },
-        "start_game": {
-          "en": "Start game (difficulty: $difficulty)",
-          "ru": "Начать игру (уровень сложности: $difficulty)"
-        },
-        "select_difficulty": {
-          "en": "Select difficulty",
-          "ru": "Выбрать уровень сложности"
-        }
-      }
-    },
-    "select_min_number": {
-      "description": {
-        "en": "You need to specify the minimum number of the range in which the secret number will be.",
-        "ru": "Вам нужно указать минимальное число диапазона, в котором будет загаданное число."
-      },
-      "messages": {
-        "prompt": {
-          "en": "Enter a non-negative integer to guess from, or \"back\" to return to the menu.",
-          "ru": "Введите неотрицательное целое число, от которого будете угадывать, или \"назад\" для возврата в меню."
-        }
-      }
-    },
-    "select_max_number": {
-      "description": {
-        "en": "You need to specify the maximum number of the range in which the secret number will be.",
-        "ru": "Вам нужно указать максимальное число диапазона, в котором будет загаданное число."
-      },
-      "messages": {
-        "prompt": {
-          "en": "Enter a non-negative integer to guess up to, or \"back\" to return to the previous step.",
-          "ru": "Введите неотрицательное целое число, до которого будете угадывать, или \"назад\" для возврата."
-        },
-        "range_too_small": {
-          "en": "It's boring to guess in such a small range. Specify a number at least %d greater than the minimum.",
-          "ru": "Скучно угадывать в таком маленьком диапазоне. Укажите число, большее минимального хотя бы на %d."
-        }
-      }
-    },
-    "start_game": {
-      "description": {
-        "en": "The game is starting! Prepare to guess the secret number.",
-        "ru": "Игра начинается! Готовьтесь угадать загаданное число."
-      },
-      "messages": {
-        "game_start": {
-          "en": "The game begins! You need to guess a number from %d to %d in %d attempts. Good luck!",
-          "ru": "Игра начинается! Вам нужно угадать число от %d до %d за %d попыток. Удачи!"
-        }
-      }
-    },
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
     "game": {
-      "description": {
-        "en": "You need to guess the secret number within the range you specified.",
-        "ru": "Вам нужно отгадать загаданное число в указанном вами диапазоне."
-      },
-      "messages": {
-        "attempts_left": {
-          "en": "Attempts left: %d!",
-          "ru": "Осталось попыток: %d!"
+      "main_menu": {
+        "description": {
+          "en": "You are in the main menu of Guess the Number. Select an option to start the game or adjust settings.",
+          "ru": "Вы в главном меню игры 'Угадай число'. Выберите опцию, чтобы начать игру или настроить параметры."
         },
-        "hint_bigger": {
-          "en": "Try a bigger number.",
-          "ru": "Попробуйте число побольше."
-        },
-        "hint_smaller": {
-          "en": "Try a smaller number.",
-          "ru": "Попробуйте число поменьше."
-        },
-        "you_guessed": {
-          "en": "You guessed it!",
-          "ru": "Вы угадали!"
+        "messages": {
+          "exit_option": {
+            "en": "Exit",
+            "ru": "Выйти"
+          },
+          "start_game": {
+            "en": "Start game (difficulty: $difficulty)",
+            "ru": "Начать игру (уровень сложности: $difficulty)"
+          },
+          "select_difficulty": {
+            "en": "Select difficulty",
+            "ru": "Выбрать уровень сложности"
+          }
         }
-      }
-    },
-    "end_game": {
-      "description": {
-        "en": "The game has ended. Check your results!",
-        "ru": "Игра окончена. Проверьте свои результаты!"
       },
-      "messages": {
-        "win": {
-          "en": "Congratulations! You guessed it and won! Want to play again?",
-          "ru": "Поздравляем! Вы угадали и победили! Желаете сыграть ещё раз?"
+      "select_min_number": {
+        "description": {
+          "en": "You need to specify the minimum number of the range in which the secret number will be.",
+          "ru": "Вам нужно указать минимальное число диапазона, в котором будет загаданное число."
         },
-        "loss": {
-          "en": "Unfortunately, you didn't guess the number... Want to try again?",
-          "ru": "К сожалению, вы не угадали число... Желаете попробовать ещё раз?"
+        "messages": {
+          "prompt": {
+            "en": "Enter a non-negative integer to guess from, or \"back\" to return to the menu.",
+            "ru": "Введите неотрицательное целое число, от которого будете угадывать, или \"назад\" для возврата в меню."
+          }
         }
-      }
-    },
-    "end_game_menu": {
-      "description": {
-        "en": "You are in the end menu. Choose what to do next.",
-        "ru": "Вы в меню после окончания игры. Выберите, что делать дальше."
       },
-      "messages": {
-        "retry": {
-          "en": "Try again",
-          "ru": "Попробовать ещё раз"
+      "select_max_number": {
+        "description": {
+          "en": "You need to specify the maximum number of the range in which the secret number will be.",
+          "ru": "Вам нужно указать максимальное число диапазона, в котором будет загаданное число."
         },
-        "change_difficulty": {
-          "en": "Change difficulty",
-          "ru": "Изменить уровень сложности"
-        },
-        "main_menu": {
-          "en": "Back to main menu",
-          "ru": "В главное меню"
+        "messages": {
+          "prompt": {
+            "en": "Enter a non-negative integer to guess up to, or \"back\" to return to the previous step.",
+            "ru": "Введите неотрицательное целое число, до которого будете угадывать, или \"назад\" для возврата."
+          },
+          "range_too_small": {
+            "en": "It's boring to guess in such a small range. Specify a number at least %d greater than the minimum.",
+            "ru": "Скучно угадывать в таком маленьком диапазоне. Укажите число, большее минимального хотя бы на %d."
+          }
         }
-      }
-    },
-    "select_difficulty_menu": {
-      "description": {
-        "en": "You are in the difficulty selection menu for Guess the Number. Your choice will affect the number of attempts.",
-        "ru": "Вы в меню выбора сложности игры 'Угадай число'. От выбора зависит количество попыток."
       },
-      "messages": {
-        "prompt": {
-          "en": "Select difficulty level:",
-          "ru": "Выберите уровень сложности:"
+      "start_game": {
+        "description": {
+          "en": "The game is starting! Prepare to guess the secret number.",
+          "ru": "Игра начинается! Готовьтесь угадать загаданное число."
         },
-        "selected": {
-          "en": "You selected %s difficulty.",
-          "ru": "Вы выбрали %s уровень сложности."
+        "messages": {
+          "game_start": {
+            "en": "The game begins! You need to guess a number from %d to %d in %d attempts. Good luck!",
+            "ru": "Игра начинается! Вам нужно угадать число от %d до %d за %d попыток. Удачи!"
+          }
+        }
+      },
+      "game": {
+        "description": {
+          "en": "You need to guess the secret number within the range you specified.",
+          "ru": "Вам нужно отгадать загаданное число в указанном вами диапазоне."
         },
-        "invalid_input": {
-          "en": "Enter the number corresponding to the difficulty level you have chosen.",
-          "ru": "Введите целое число, соответствующее выбранному вами уровню сложности."
+        "messages": {
+          "attempts_left": {
+            "en": "Attempts left: %d!",
+            "ru": "Осталось попыток: %d!"
+          },
+          "hint_bigger": {
+            "en": "Try a bigger number.",
+            "ru": "Попробуйте число побольше."
+          },
+          "hint_smaller": {
+            "en": "Try a smaller number.",
+            "ru": "Попробуйте число поменьше."
+          },
+          "you_guessed": {
+            "en": "You guessed it!",
+            "ru": "Вы угадали!"
+          }
+        }
+      },
+      "end_game": {
+        "description": {
+          "en": "The game has ended. Check your results!",
+          "ru": "Игра окончена. Проверьте свои результаты!"
         },
-        "invalid_option": {
-          "en": "There is no such difficulty option.",
-          "ru": "В меню нет такого уровня сложности."
+        "messages": {
+          "win": {
+            "en": "Congratulations! You guessed it and won! Want to play again?",
+            "ru": "Поздравляем! Вы угадали и победили! Желаете сыграть ещё раз?"
+          },
+          "loss": {
+            "en": "Unfortunately, you didn't guess the number... Want to try again?",
+            "ru": "К сожалению, вы не угадали число... Желаете попробовать ещё раз?"
+          }
+        }
+      },
+      "end_game_menu": {
+        "description": {
+          "en": "You are in the end menu. Choose what to do next.",
+          "ru": "Вы в меню после окончания игры. Выберите, что делать дальше."
+        },
+        "messages": {
+          "retry": {
+            "en": "Try again",
+            "ru": "Попробовать ещё раз"
+          },
+          "change_difficulty": {
+            "en": "Change difficulty",
+            "ru": "Изменить уровень сложности"
+          },
+          "main_menu": {
+            "en": "Back to main menu",
+            "ru": "В главное меню"
+          }
+        }
+      },
+      "select_difficulty_menu": {
+        "description": {
+          "en": "You are in the difficulty selection menu for Guess the Number. Your choice will affect the number of attempts.",
+          "ru": "Вы в меню выбора сложности игры 'Угадай число'. От выбора зависит количество попыток."
+        },
+        "messages": {
+          "prompt": {
+            "en": "Select difficulty level:",
+            "ru": "Выберите уровень сложности:"
+          },
+          "selected": {
+            "en": "You selected %s difficulty.",
+            "ru": "Вы выбрали %s уровень сложности."
+          },
+          "invalid_input": {
+            "en": "Enter the number corresponding to the difficulty level you have chosen.",
+            "ru": "Введите целое число, соответствующее выбранному вами уровню сложности."
+          },
+          "invalid_option": {
+            "en": "There is no such difficulty option.",
+            "ru": "В меню нет такого уровня сложности."
+          }
         }
       }
     }

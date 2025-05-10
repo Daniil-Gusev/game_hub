@@ -1,6 +1,11 @@
 {
-  "welcome": {
-    "en": "Welcome to the game!",
-    "ru": "Добро пожаловать в игру!"
+  "meta": {
+    "supported_languages": ["en", "ru"]
+  },
+  "translations": {
+    "welcome": {
+      "en": "Welcome to the game!",
+      "ru": "Добро пожаловать в игру!"
+    }
   }
 }

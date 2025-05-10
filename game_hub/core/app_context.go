@@ -5,11 +5,12 @@ import (
 )
 
 type AppContext struct {
-	Config       *config.Config
-	Game         GameInterface
-	StateStack   *StateStack
-	AppIsRunning bool
-	GoToMenu     bool
+	Config         *config.Config
+	Game           GameInterface
+	AvailableGames []GameInterface
+	StateStack     *StateStack
+	AppIsRunning   bool
+	GoToMenu       bool
 }
 
 func (app *AppContext) GetCurrentState() (State, error) {

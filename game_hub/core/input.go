@@ -12,7 +12,7 @@ func (v InputValidator) ParseInt(input string) (int, error) {
 	input = strings.TrimSpace(input)
 	num, err := strconv.Atoi(input)
 	if err != nil {
-		return 0, NewAppError(ErrInvalidInput, "invalid_input", nil)
+		return 0, NewAppError(ErrInvalidInput, "invalid_number_input", nil)
 	}
 	if num > math.MaxInt32 || num < math.MinInt32 {
 		return 0, NewAppError(ErrOutOfRange, "out_of_range_generic", nil)

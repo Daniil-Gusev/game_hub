@@ -11,6 +11,7 @@ type UiContext struct {
 	Msg                 string
 	Validator           InputValidator
 	ErrHandler          ErrorHandler
+	Logger              Logger
 	LocalizationManager *LocalizationManager
 	CommandRegistry     *CommandRegistry
 	AppLocalizer        *MessageLocalizer

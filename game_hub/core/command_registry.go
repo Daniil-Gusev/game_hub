@@ -28,7 +28,7 @@ func (r *CommandRegistry) LoadGlobalTranslations(filePath string) error {
 func (r *CommandRegistry) LoadLocalTranslations(filePath string) error {
 	return r.localLocalizer.LoadTranslations(filePath)
 }
-func (r *CommandRegistry) UpdateAliases(lang string) {
+func (r *CommandRegistry) UpdateAliases() {
 	r.updateGlobalAliases()
 	r.updateLocalAliases()
 }
