@@ -75,49 +75,41 @@ func main() {
 		return
 	}
 	startState := core.State(&app.StartState{})
-	currentState := startState
-	appCtx.StateStack.Push(currentState)
-	if _, err := currentState.Init(appCtx, uiCtx); err != nil {
-		uiCtx.DisplayError(err)
+	runMainLoop(appCtx, uiCtx, startState)
+}
+
+func runMainLoop(appCtx *core.AppContext, uiCtx *core.UiContext, startState core.State) {
+	currentState, err := appCtx.GoToState(startState, uiCtx)
+	uiCtx.DisplayError(err)
+	if currentState == nil {
 		return
 	}
-	if err := uiCtx.CommandRegistry.RegisterLocalCommands(currentState.GetCommands()); err != nil {
-		uiCtx.DisplayError(err)
-	}
-
 	for appCtx.AppIsRunning {
 		currentState.Display(appCtx, uiCtx)
-		input, inputErr := "", error(nil)
+		input := ""
 		if currentState.RequiresInput() {
-			input, inputErr = uiCtx.Console.Read()
+			buf, inputErr := uiCtx.Console.Read()
 			uiCtx.DisplayError(inputErr)
 			if appErr, ok := inputErr.(*core.AppError); ok && appErr.Code == core.ErrEOF {
-				currentState = &core.ExitState{}
-				_, err := currentState.Init(appCtx, uiCtx)
+				currentState, err := appCtx.GoToState(&core.ExitState{}, uiCtx)
 				uiCtx.DisplayError(err)
-				appCtx.StateStack.Push(currentState)
 				currentState.Display(appCtx, uiCtx)
 			}
+			input = buf
 		}
 		nextState, err := uiCtx.HandleInput(input, appCtx)
 		uiCtx.DisplayError(err)
 		if appErr, ok := err.(*core.AppError); ok && appErr.Code == core.ErrStateStack {
-			currentState = startState
-			_, err := currentState.Init(appCtx, uiCtx)
+			currentState, err := appCtx.GoToState(startState, uiCtx)
 			uiCtx.DisplayError(err)
-			appCtx.StateStack.Push(currentState)
 			currentState.Display(appCtx, uiCtx)
 		}
 		if appCtx.GoToMenu {
-			currentState = startState
 			appCtx.StateStack.Clear()
-			appCtx.StateStack.Push(currentState)
-			if _, err := currentState.Init(appCtx, uiCtx); err != nil {
-				uiCtx.DisplayError(err)
+			currentState, err := appCtx.GoToState(startState, uiCtx)
+			uiCtx.DisplayError(err)
+			if currentState == nil {
 				return
-			}
-			if err := uiCtx.CommandRegistry.RegisterLocalCommands(currentState.GetCommands()); err != nil {
-				uiCtx.DisplayError(err)
 			}
 			appCtx.GoToMenu = false
 			continue
@@ -126,18 +118,8 @@ func main() {
 			if nextState == startState {
 				appCtx.StateStack.Clear()
 			}
-			appCtx.StateStack.Push(nextState)
-			currentState = nextState
-			newState, err := currentState.Init(appCtx, uiCtx)
+			currentState, err = appCtx.GoToState(nextState, uiCtx)
 			uiCtx.DisplayError(err)
-			if err != nil && (newState != currentState) {
-				appCtx.StateStack.Pop()
-				appCtx.StateStack.Push(newState)
-				currentState = newState
-			}
-			if err := uiCtx.CommandRegistry.RegisterLocalCommands(currentState.GetCommands()); err != nil {
-				uiCtx.DisplayError(err)
-			}
 		}
 		uiCtx.DisplayMessage()
 	}

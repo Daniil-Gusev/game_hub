@@ -16,7 +16,7 @@ func (b *BaseGameState) Scope() core.Scope {
 func (b *BaseGameState) Init(ctx *core.AppContext, ui *core.UiContext) (core.State, error) {
 	game, ok := ctx.Game.(*Game)
 	if !ok {
-		return nil, core.NewAppError(core.ErrInternal, "getting_gamedata_error", nil)
+		return &core.GameExitState{}, core.NewAppError(core.ErrInternal, "getting_gamedata_error", nil)
 	}
 	b.game = game
 	return b, nil

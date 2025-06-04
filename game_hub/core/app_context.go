@@ -29,3 +29,18 @@ func (app *AppContext) GetPreviousState() (State, error) {
 	app.StateStack.Pop()
 	return app.StateStack.Pop(), nil
 }
+
+func (app *AppContext) GoToState(nextState State, ui *UiContext) (State, error) {
+	app.StateStack.Push(nextState)
+	if newState, err := nextState.Init(app, ui); err != nil {
+		if newState != nextState {
+			app.StateStack.Pop()
+			app.StateStack.Push(newState)
+		}
+		return newState, err
+	}
+	if err := ui.CommandRegistry.RegisterLocalCommands(nextState.GetCommands()); err != nil {
+		return nextState, err
+	}
+	return nextState, nil
+}
