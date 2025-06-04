@@ -4,8 +4,8 @@ type Scope string
 
 const (
 	ScopeCore Scope = "core"
-	ScopeApp        = "app"
-	ScopeGame       = "game"
+	ScopeApp  Scope = "app"
+	ScopeGame Scope = "game"
 )
 
 func (s Scope) IsValid() bool {

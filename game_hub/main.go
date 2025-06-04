@@ -29,7 +29,11 @@ func main() {
 		fmt.Printf("Failed to initialize console: %v\r\n", err)
 		return
 	}
-	defer console.Close()
+	defer func() {
+		if consoleErr := console.Close(); consoleErr != nil && err == nil {
+			err = consoleErr
+		}
+	}()
 	lm, err := core.NewLocalizationManager(cfg)
 	if err != nil {
 		fmt.Printf("Failed to initialize localization manager: %v\r\n", err)
@@ -42,7 +46,7 @@ func main() {
 	uiCtx := &core.UiContext{
 		Console:             console,
 		Validator:           core.InputValidator{},
-		ErrHandler:          errorHandler,
+		ErrorHandler:        errorHandler,
 		Logger:              logger,
 		CommandRegistry:     core.NewCommandRegistry(core.NewCommandLocalizer(lm), core.NewCommandLocalizer(lm)),
 		LocalizationManager: lm,

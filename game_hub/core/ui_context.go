@@ -10,7 +10,7 @@ type UiContext struct {
 	Console             Console
 	Msg                 string
 	Validator           InputValidator
-	ErrHandler          ErrorHandler
+	ErrorHandler        ErrorHandler
 	Logger              Logger
 	LocalizationManager *LocalizationManager
 	CommandRegistry     *CommandRegistry
@@ -20,20 +20,25 @@ type UiContext struct {
 }
 
 func (ui *UiContext) DisplayText(txt string) {
-	ui.Console.Write(utils.WrapText(txt, 80))
+	if err := ui.Console.Write(utils.WrapText(txt, 80)); err != nil {
+		fmt.Println(ui.ErrorHandler.Handle(err))
+	}
 }
+
 func (ui *UiContext) DisplayError(err error) {
-	msg := ui.ErrHandler.Handle(err)
+	msg := ui.ErrorHandler.Handle(err)
 	if msg != "" {
 		ui.DisplayText(fmt.Sprintf("%s\r\n", msg))
 	}
 }
+
 func (ui *UiContext) DisplayMessage() {
 	if ui.Msg != "" {
-		ui.DisplayText(fmt.Sprintf("%s", ui.Msg))
+		ui.DisplayText(ui.Msg)
 		ui.Msg = ""
 	}
 }
+
 func (ui *UiContext) HandleInput(input string, ctx *AppContext) (State, error) {
 	input = strings.TrimSpace(input)
 	if cmd, args := ui.CommandRegistry.ParseInput(input); cmd != nil {
@@ -53,6 +58,7 @@ func (ui *UiContext) GetLocalizedMsg(localizer *MessageLocalizer, key string) st
 	}
 	return msg
 }
+
 func (ui *UiContext) GetOptionalLocalizedMsg(localizer *MessageLocalizer, set string, key string) string {
 	msg, err := localizer.GetOptional(set, key)
 	if err != nil {
@@ -68,6 +74,7 @@ func (ui *UiContext) GetLocalizedCmdName(cmd Command) string {
 	}
 	return name
 }
+
 func (ui *UiContext) GetLocalizedCmdDescription(cmd Command) string {
 	desc, err := ui.CommandRegistry.GetDescription(cmd)
 	if err != nil {
@@ -75,6 +82,7 @@ func (ui *UiContext) GetLocalizedCmdDescription(cmd Command) string {
 	}
 	return desc
 }
+
 func (ui *UiContext) GetLocalizedCmdAliases(cmd Command) []string {
 	aliases, err := ui.CommandRegistry.GetAliases(cmd)
 	if err != nil {
@@ -90,6 +98,7 @@ func (ui *UiContext) GetLocalizedStateDescription(state State) string {
 	}
 	return desc
 }
+
 func (ui *UiContext) GetLocalizedStateMsg(state State, key string) string {
 	msg, err := ui.StateLocalizer.GetMessage(state.Scope(), state.Id(), key)
 	if err != nil {

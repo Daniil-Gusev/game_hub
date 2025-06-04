@@ -53,7 +53,11 @@ func NewPathConfig(appName string) (*PathConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer dir.Close()
+	defer func() {
+		if dirErr := dir.Close(); dirErr != nil && err == nil {
+			err = dirErr
+		}
+	}()
 	_, err = dir.Readdirnames(1) // Check for at least one entry
 	if err != nil {
 		return nil, errors.New("configuration directory is empty: " + baseDir)

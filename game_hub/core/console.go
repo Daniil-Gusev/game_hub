@@ -12,7 +12,7 @@ import (
 // интерфейс ввода-вывода
 type Console interface {
 	Read() (string, error)
-	Write(string)
+	Write(string) error
 	Close() error
 }
 
@@ -41,8 +41,11 @@ func (c *StdConsole) Read() (string, error) {
 	return "", NewAppError(ErrEOF, "interrupt", nil)
 }
 
-func (c *StdConsole) Write(s string) {
-	os.Stdout.WriteString(s)
+func (c *StdConsole) Write(s string) error {
+	if _, err := os.Stdout.WriteString(s); err != nil {
+		return err
+	}
+	return nil
 }
 
 type StdReadlineConsole struct {
@@ -78,8 +81,11 @@ func (c *StdReadlineConsole) Read() (string, error) {
 	return strings.TrimSpace(line), nil
 }
 
-func (c *StdReadlineConsole) Write(s string) {
-	os.Stdout.WriteString(s)
+func (c *StdReadlineConsole) Write(s string) error {
+	if _, err := os.Stdout.WriteString(s); err != nil {
+		return err
+	}
+	return nil
 }
 
 func (c *StdReadlineConsole) Close() error {

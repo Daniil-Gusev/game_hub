@@ -30,7 +30,7 @@ type AppError struct {
 
 func (e *AppError) Error() string {
 	msg := e.Message
-	if e.Details == nil || len(e.Details) == 0 {
+	if len(e.Details) == 0 {
 		return msg
 	}
 	msg += "\r\nDetails:"
@@ -52,16 +52,16 @@ func NewAppErrors(errs []error) *AppErrors {
 	appErrors := &AppErrors{
 		Errors: make([]error, 0, 10),
 	}
-	if errs != nil {
-		for _, err := range errs {
-			appErrors.Add(err)
-		}
+	for _, err := range errs {
+		appErrors.Add(err)
 	}
 	return appErrors
 }
+
 func (e *AppErrors) Add(err error) {
 	e.Errors = append(e.Errors, err)
 }
+
 func (e *AppErrors) Error() string {
 	var text string
 	for _, err := range e.Errors {
@@ -83,6 +83,7 @@ func NewLocalizedErrorHandler(localizer *MessageLocalizer) *LocalizedErrorHandle
 		localizer: localizer,
 	}
 }
+
 func (h *LocalizedErrorHandler) Handle(err error) string {
 	if err == nil {
 		return ""
@@ -114,8 +115,9 @@ func (h *LocalizedErrorHandler) Handle(err error) string {
 			informationBuf, locErr := h.localizer.Get(informationKey)
 			if locErr != nil {
 				information = string(appErr.Code)
+			} else {
+				information = informationBuf
 			}
-			information = informationBuf
 		}
 		if appErr.Details == nil || appErr.Details["IsLocalized"] == nil {
 			localizedMsg, locErr := h.localizer.Get(appErr.Message)

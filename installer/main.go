@@ -40,11 +40,15 @@ func main() {
 	if err := run(); err != nil {
 		fmt.Printf("\nOperation failed: %v\n", err)
 		fmt.Println("\nPress any key to exit...")
-		fmt.Scanln()
+		if _, err := fmt.Scanln(); err != nil {
+			fmt.Printf("Input error: %v\n", err)
+		}
 		os.Exit(1)
 	}
 	fmt.Println("Press any key to exit...")
-	fmt.Scanln()
+	if _, err := fmt.Scanln(); err != nil {
+		fmt.Printf("Input error: %v\n", err)
+	}
 }
 
 func run() error {

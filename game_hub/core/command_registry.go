@@ -249,15 +249,6 @@ func (r *CommandRegistry) findCommandOrAliasByPrefix(cmds []Command, aliasMap ma
 	return nil
 }
 
-func (r *CommandRegistry) findCommandByName(cmds []Command, name string) Command {
-	for _, cmd := range cmds {
-		if cmdName, _ := r.GetName(cmd); cmdName == name {
-			return cmd
-		}
-	}
-	return nil
-}
-
 func (r *CommandRegistry) findCommandByPrefix(cmds []Command, prefix string) Command {
 	index := sort.Search(len(cmds), func(i int) bool {
 		name, _ := r.GetName(cmds[i])

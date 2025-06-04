@@ -25,11 +25,16 @@ func ReadFile(filePath string) ([]byte, error) {
 			"error": err,
 		})
 	}
-	defer file.Close()
-
 	data, err := io.ReadAll(file)
 	if err != nil {
 		return nil, NewAppError(Err, "file_read_error", map[string]any{
+			"file":  filePath,
+			"error": err,
+		})
+	}
+	err = file.Close()
+	if err != nil {
+		return nil, NewAppError(Err, "file_close_error", map[string]any{
 			"file":  filePath,
 			"error": err,
 		})

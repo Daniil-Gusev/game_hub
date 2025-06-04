@@ -24,22 +24,6 @@ func (m MessageTranslations) isLocalized(langs []string) error {
 
 type OptionalMessageTranslations map[string]MessageTranslations
 
-func (m OptionalMessageTranslations) isLocalized(langs []string) error {
-	for key, messages := range m {
-		for msgKey, msgTrans := range messages {
-			for _, supportedLang := range langs {
-				if _, exists := msgTrans[supportedLang]; exists {
-					continue
-				}
-				return NewAppError(Err, "key_not_found", map[string]any{
-					"key": fmt.Sprintf("%s.%s.%s", key, msgKey, supportedLang),
-				})
-			}
-		}
-	}
-	return nil
-}
-
 type MessageLocalizationData struct {
 	Meta         LocalizationMetadata `json:"meta"`
 	Translations MessageTranslations  `json:"translations"`

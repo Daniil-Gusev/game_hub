@@ -1,4 +1,4 @@
-package gametemplate
+package game_template
 
 import (
 	"game_hub/core"

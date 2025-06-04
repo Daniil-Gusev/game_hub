@@ -89,13 +89,13 @@ func (l *CommandLocalizer) LoadTranslations(filePath string) error {
 		}
 		for cmdId, trans := range cmds {
 			if len(trans.Name) == 0 {
-				return NewAppError(ErrLocalization, "localization_file_translations_error", map[string]any{
+				l.lm.logError(NewAppError(ErrLocalization, "localization_file_translations_error", map[string]any{
 					"file": filePath,
 					"path": fmt.Sprintf("translations.%v.%s", scope, cmdId),
-					"error": NewAppError(ErrLocalization, "key_not_found", map[string]any{
+					"error": NewAppError(Err, "key_not_found", map[string]any{
 						"key": fmt.Sprintf("%s.name", cmdId),
 					}),
-				})
+				}))
 				continue
 			}
 			if trans.Description == nil {
