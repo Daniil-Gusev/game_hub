@@ -11,6 +11,7 @@ type QuitCommand struct{ BaseCommand }
 func (c *QuitCommand) Id() string {
 	return "quit"
 }
+
 func (c *QuitCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	if len(args) > 1 && args[1] == "force" {
 		return &ExitState{}, nil
@@ -30,6 +31,7 @@ type HelpCommand struct{ BaseCommand }
 func (c *HelpCommand) Id() string {
 	return "help"
 }
+
 func (c *HelpCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	state, err := ctx.GetCurrentState()
 	if err != nil {
@@ -56,6 +58,7 @@ type BackCommand struct{ BaseCommand }
 func (c *BackCommand) Id() string {
 	return "back"
 }
+
 func (c *BackCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	state, err := ctx.GetPreviousState()
 	if err != nil {
@@ -69,6 +72,7 @@ type ExitCommand struct{ BaseCommand }
 func (c *ExitCommand) Id() string {
 	return "exit"
 }
+
 func (c *ExitCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	return ctx.Game.GetStartState(), nil
 }
@@ -78,6 +82,7 @@ type VersionCommand struct{ BaseCommand }
 func (c *VersionCommand) Id() string {
 	return "version"
 }
+
 func (c *VersionCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	versionMsg := ui.GetLocalizedMsg(ui.AppLocalizer, "version_info")
 	var displayTime string
@@ -97,6 +102,7 @@ type ConfirmCommand struct{ BaseCommand }
 func (c *ConfirmCommand) Id() string {
 	return "confirm"
 }
+
 func (c *ConfirmCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	currentState, err := ctx.GetCurrentState()
 	if err != nil {
@@ -115,6 +121,7 @@ type CancelCommand struct{ BaseCommand }
 func (c *CancelCommand) Id() string {
 	return "cancel"
 }
+
 func (c *CancelCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (State, error) {
 	return ctx.GetPreviousState()
 }

@@ -8,7 +8,7 @@ import (
 
 type InputValidator struct{}
 
-func (v InputValidator) ParseInt(input string) (int, error) {
+func (v *InputValidator) ParseInt(input string) (int, error) {
 	input = strings.TrimSpace(input)
 	num, err := strconv.Atoi(input)
 	if err != nil {
@@ -20,7 +20,7 @@ func (v InputValidator) ParseInt(input string) (int, error) {
 	return num, nil
 }
 
-func (v InputValidator) IsNumInRange(num, min, max int) (bool, error) {
+func (v *InputValidator) IsNumInRange(num, min, max int) (bool, error) {
 	if num > math.MaxInt32 || num < math.MinInt32 {
 		return false, NewAppError(ErrOutOfRange, "out_of_range_generic", nil)
 	}
@@ -37,7 +37,7 @@ func (v InputValidator) IsNumInRange(num, min, max int) (bool, error) {
 	return true, nil
 }
 
-func (v InputValidator) ParseIntInRange(input string, min, max int) (int, error) {
+func (v *InputValidator) ParseIntInRange(input string, min, max int) (int, error) {
 	num, err := v.ParseInt(input)
 	if err != nil {
 		return 0, err
@@ -48,7 +48,7 @@ func (v InputValidator) ParseIntInRange(input string, min, max int) (int, error)
 	return num, nil
 }
 
-func (v InputValidator) ParseOptionalIntInRange(input string, defaultValue, min, max int) (int, error) {
+func (v *InputValidator) ParseOptionalIntInRange(input string, defaultValue, min, max int) (int, error) {
 	if input == "" {
 		if _, err := v.IsNumInRange(defaultValue, min, max); err != nil {
 			return 0, err

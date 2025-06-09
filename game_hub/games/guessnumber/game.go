@@ -31,6 +31,7 @@ func (d Difficulty) String() string {
 		return "unknown"
 	}
 }
+
 func (d Difficulty) GetModifier() int {
 	switch d {
 	case VeryEasy:
@@ -76,6 +77,7 @@ func NewGame() *Game {
 		RandomGenerator: core.NewRandomGenerator(),
 	}
 }
+
 func (g *Game) Prepare() error {
 	g.isWon = false
 	secret, err := g.RandomGenerator.Generate(g.MinNumber, g.MaxNumber)
@@ -108,18 +110,22 @@ func (g *Game) CalculateAttempts() (int, error) {
 func (g *Game) GetAttempts() int {
 	return g.attempts
 }
+
 func (g *Game) CheckWin() bool {
 	return g.isWon
 }
+
 func (g *Game) CheckLoss() bool {
 	return g.attempts < 1
 }
+
 func (g *Game) MakeGuess(guess int) {
 	g.attempts--
 	if guess == g.secretNumber {
 		g.isWon = true
 	}
 }
+
 func (g *Game) GetHint(guess int) string {
 	if guess < g.secretNumber {
 		return "hint_bigger"

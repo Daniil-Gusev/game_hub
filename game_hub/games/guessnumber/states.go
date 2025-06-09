@@ -107,7 +107,7 @@ func (s *SelectMaxNumberState) Handle(ctx *core.AppContext, ui *core.UiContext, 
 		return s, err
 	}
 	if (num - s.game.MinNumber) < s.game.MinRangeSize {
-		ui.Msg = fmt.Sprintf(ui.GetLocalizedStateMsg(s, "range_too_small")+"\r\n", s.game.MinRangeSize)
+		ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "range_too_small")+"\r\n", s.game.MinRangeSize))
 		return s, nil
 	}
 	s.game.MaxNumber = num
@@ -177,7 +177,7 @@ func (g *GameState) Guess(ctx *core.AppContext, ui *core.UiContext, guess int) (
 	if g.game.CheckLoss() {
 		return &EndGameState{}, nil
 	}
-	ui.Msg = fmt.Sprintf("%s\r\n", ui.GetLocalizedStateMsg(g, g.game.GetHint(guess)))
+	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedStateMsg(g, g.game.GetHint(guess))))
 	return g, nil
 }
 
@@ -254,15 +254,16 @@ func (s *SelectDifficultyMenuState) Display(ctx *core.AppContext, ui *core.UiCon
 func (s *SelectDifficultyMenuState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseInt(input)
 	if err != nil {
-		return s, core.NewAppError(core.ErrInvalidInput, ui.GetLocalizedStateMsg(s, "invalid_input"), map[string]any{"IsLocalized": true})
+		ui.DisplayText(ui.GetLocalizedStateMsg(s, "invalid_input") + "\r\n")
+		return s, nil
 	}
 	diff := Difficulty(num)
 	if diff < VeryEasy || diff > VeryHard {
-		ui.Msg = ui.GetLocalizedStateMsg(s, "invalid_option") + "\r\n"
+		ui.DisplayText(ui.GetLocalizedStateMsg(s, "invalid_option") + "\r\n")
 		return s, nil
 	}
 	s.game.Difficulty = diff
-	ui.Msg = fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", ui.GetLocalizedMsg(ui.GameLocalizer, diff.String()))
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", ui.GetLocalizedMsg(ui.GameLocalizer, diff.String())))
 	return ctx.GetPreviousState()
 }
 

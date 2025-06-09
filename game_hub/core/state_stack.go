@@ -7,12 +7,15 @@ type StateStack struct {
 func NewStateStack() *StateStack {
 	return &StateStack{states: make([]State, 0)}
 }
+
 func (s *StateStack) IsEmpty() bool {
 	return len(s.states) == 0
 }
+
 func (s *StateStack) Push(state State) {
 	s.states = append(s.states, state)
 }
+
 func (s *StateStack) Pop() State {
 	if s.IsEmpty() {
 		return nil
@@ -22,6 +25,7 @@ func (s *StateStack) Pop() State {
 	s.states = s.states[:lastIndex]
 	return state
 }
+
 func (s *StateStack) Peek() State {
 	if s.IsEmpty() {
 		return nil
@@ -29,6 +33,7 @@ func (s *StateStack) Peek() State {
 	lastIndex := len(s.states) - 1
 	return s.states[lastIndex]
 }
+
 func (s *StateStack) Clear() {
 	s.states = s.states[:0]
 }

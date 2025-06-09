@@ -130,6 +130,7 @@ func (pc *PathConfig) GameCommandsPath(gameID string) string {
 func (pc *PathConfig) GameTranslationsPath(gameID string) string {
 	return filepath.Join(pc.gamesDir, gameID, "translations.json")
 }
+
 func OsConfigDir(platform string) (string, error) {
 	switch platform {
 	case "linux":

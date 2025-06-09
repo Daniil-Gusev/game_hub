@@ -15,6 +15,7 @@ type InitGameState struct {
 func (g *InitGameState) Id() string {
 	return "init_game"
 }
+
 func (g *InitGameState) Init(ctx *AppContext, ui *UiContext) (State, error) {
 	gameId := g.Game.GetId()
 	statesPath := ctx.Config.Paths.GameStatesPath(gameId)
@@ -51,42 +52,43 @@ func (g *InitGameState) Init(ctx *AppContext, ui *UiContext) (State, error) {
 	}
 	return g, nil
 }
+
 func (g *InitGameState) Display(ctx *AppContext, ui *UiContext) {
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "game_welcome"), ui.GetOptionalLocalizedMsg(ui.AppLocalizer, g.Game.GetId(), "name")) + "\r\n")
 }
+
 func (g *InitGameState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
 	ctx.Game = g.Game.CreateNew()
 	return g.Game.GetStartState(), nil
 }
+
 func (g *InitGameState) RequiresInput() bool {
 	return false
 }
 
-// выход из приложения
 type ExitState struct{ BaseState }
 
 func (e *ExitState) Id() string {
 	return "exit"
 }
+
 func (e *ExitState) Display(_ *AppContext, ui *UiContext) {
 	ui.DisplayText(ui.GetLocalizedStateMsg(e, "exit") + "\r\n")
 }
+
 func (e *ExitState) Handle(ctx *AppContext, _ *UiContext, _ string) (State, error) {
 	ctx.AppIsRunning = false
 	return e, nil
 }
+
 func (e *ExitState) RequiresInput() bool {
 	return false
 }
 
-// выход из игры
 type GameExitState struct{ BaseState }
 
 func (e *GameExitState) Id() string {
 	return "game_exit"
-}
-func (e *GameExitState) RequiresInput() bool {
-	return false
 }
 
 func (e *GameExitState) Handle(ctx *AppContext, ui *UiContext, _ string) (State, error) {
@@ -95,28 +97,16 @@ func (e *GameExitState) Handle(ctx *AppContext, ui *UiContext, _ string) (State,
 	return e, nil
 }
 
+func (e *GameExitState) RequiresInput() bool {
+	return false
+}
+
 type ConfirmationDialogState struct {
 	BaseState
 	message   string
 	nextState State
 }
 
-func (d *ConfirmationDialogState) Id() string {
-	return "confirmation_dialog"
-}
-func (d *ConfirmationDialogState) Display(_ *AppContext, ui *UiContext) {
-	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
-}
-func (d *ConfirmationDialogState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
-	ui.Msg = ui.GetLocalizedStateMsg(d, "confirmation_prompt") + "\r\n"
-	return d, nil
-}
-func (d *ConfirmationDialogState) GetCommands() []Command {
-	return []Command{
-		&ConfirmCommand{},
-		&CancelCommand{},
-	}
-}
 func NewConfirmationDialog(nextState State, message string) *ConfirmationDialogState {
 	if message == "" {
 		message = "confirmation_default"
@@ -127,12 +117,33 @@ func NewConfirmationDialog(nextState State, message string) *ConfirmationDialogS
 	}
 }
 
+func (d *ConfirmationDialogState) Id() string {
+	return "confirmation_dialog"
+}
+
+func (d *ConfirmationDialogState) Display(_ *AppContext, ui *UiContext) {
+	ui.DisplayText(fmt.Sprintf("%s\r\n", ui.GetLocalizedMsg(ui.AppLocalizer, d.message)))
+}
+
+func (d *ConfirmationDialogState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
+	ui.DisplayText(ui.GetLocalizedStateMsg(d, "confirmation_prompt") + "\r\n")
+	return d, nil
+}
+
+func (d *ConfirmationDialogState) GetCommands() []Command {
+	return []Command{
+		&ConfirmCommand{},
+		&CancelCommand{},
+	}
+}
+
 type MenuOption struct {
 	Id          int
 	Description string
 	Params      func() map[string]any
 	NextState   func() State
 }
+
 type MenuState struct {
 	BaseState
 	ParentState State
@@ -141,38 +152,6 @@ type MenuState struct {
 	Greeting    string
 }
 
-func (m *MenuState) Id() string {
-	return "menu"
-}
-func (m *MenuState) Display(ctx *AppContext, ui *UiContext) {
-	m.ShowGreeting(ctx, ui)
-	for _, option := range m.Options {
-		desc := ui.GetLocalizedStateMsg(m.ParentState, option.Description)
-		if option.Params != nil {
-			desc = utils.SubstituteParams(desc, option.Params())
-		}
-		ui.DisplayText(fmt.Sprintf("%d. %s\r\n", option.Id, desc))
-	}
-	ui.DisplayText(ui.GetLocalizedStateMsg(m, "make_your_choice") + "\r\n")
-}
-func (m *MenuState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
-	num, err := ui.Validator.ParseInt(input)
-	if err != nil {
-		return m, err
-	}
-	option, exists := m.OptionsMap[num]
-	if !exists {
-		ui.Msg = ui.GetLocalizedStateMsg(m, "invalid_option") + "\r\n"
-		return m, nil
-	}
-	return option.NextState(), nil
-}
-func (m *MenuState) ShowGreeting(ctx *AppContext, ui *UiContext) {
-	if m.Greeting != "" {
-		ui.DisplayText(fmt.Sprintf("%s\r\n", m.Greeting))
-		m.Greeting = ""
-	}
-}
 func NewMenu(parentState State, options []MenuOption, greeting string) *MenuState {
 	sort.Slice(options, func(i, j int) bool {
 		return options[i].Id < options[j].Id
@@ -186,5 +165,41 @@ func NewMenu(parentState State, options []MenuOption, greeting string) *MenuStat
 		Options:     options,
 		OptionsMap:  optionsMap,
 		Greeting:    greeting,
+	}
+}
+
+func (m *MenuState) Id() string {
+	return "menu"
+}
+
+func (m *MenuState) Display(ctx *AppContext, ui *UiContext) {
+	m.ShowGreeting(ctx, ui)
+	for _, option := range m.Options {
+		desc := ui.GetLocalizedStateMsg(m.ParentState, option.Description)
+		if option.Params != nil {
+			desc = utils.SubstituteParams(desc, option.Params())
+		}
+		ui.DisplayText(fmt.Sprintf("%d. %s\r\n", option.Id, desc))
+	}
+	ui.DisplayText(ui.GetLocalizedStateMsg(m, "make_your_choice") + "\r\n")
+}
+
+func (m *MenuState) Handle(ctx *AppContext, ui *UiContext, input string) (State, error) {
+	num, err := ui.Validator.ParseInt(input)
+	if err != nil {
+		return m, err
+	}
+	option, exists := m.OptionsMap[num]
+	if !exists {
+		ui.DisplayText(ui.GetLocalizedStateMsg(m, "invalid_option") + "\r\n")
+		return m, nil
+	}
+	return option.NextState(), nil
+}
+
+func (m *MenuState) ShowGreeting(ctx *AppContext, ui *UiContext) {
+	if m.Greeting != "" {
+		ui.DisplayText(fmt.Sprintf("%s\r\n", m.Greeting))
+		m.Greeting = ""
 	}
 }

@@ -12,9 +12,11 @@ func (c *BaseCommand) Execute(ctx *AppContext, ui *UiContext, args []string) (St
 	ui.DisplayText(ui.GetLocalizedMsg(ui.AppLocalizer, "unknown_command_action"))
 	return ctx.GetCurrentState()
 }
+
 func (c *BaseCommand) Id() string {
 	return "unknown"
 }
+
 func (c *BaseCommand) Scope() Scope {
 	return ScopeCore
 }
@@ -24,6 +26,7 @@ type GameCommand struct{ BaseCommand }
 func (c *GameCommand) Scope() Scope {
 	return ScopeGame
 }
+
 func DefaultGlobalCommands() []Command {
 	return []Command{
 		&HelpCommand{},

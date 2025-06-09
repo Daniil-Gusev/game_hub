@@ -65,6 +65,7 @@ func NewGame() *Game {
 		RandomGenerator: core.NewRandomGenerator(),
 	}
 }
+
 func (g *Game) Reset() {
 	g.CurrentRound = 1
 	g.PlayerScore, g.BotScore = 0, 0
@@ -74,6 +75,7 @@ func (g *Game) Reset() {
 func (g *Game) MakePlayerMove(playerMove Move) {
 	g.PlayerMove = playerMove
 }
+
 func (g *Game) MakeBotMove() {
 	var botMove Move
 	rnd, _ := g.RandomGenerator.Generate(1, 3000)
@@ -86,6 +88,7 @@ func (g *Game) MakeBotMove() {
 	}
 	g.BotMove = botMove
 }
+
 func (g *Game) PlayRound() RoundResult {
 	g.CurrentRound++
 	result := g.winTable[int(g.PlayerMove)][int(g.BotMove)]
@@ -108,9 +111,11 @@ func (g *Game) PlayRound() RoundResult {
 	}
 	return result
 }
+
 func (g *Game) CheckWin() bool {
 	return g.isWon
 }
+
 func (g *Game) CheckLoss() bool {
 	return g.isLoss
 }

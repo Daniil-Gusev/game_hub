@@ -24,7 +24,7 @@ func main() {
 		AppIsRunning:   true,
 		GoToMenu:       false,
 	}
-	console, err := core.NewStdReadlineConsole()
+	console, err := core.NewReadlineConsole()
 	if err != nil {
 		fmt.Printf("Failed to initialize console: %v\r\n", err)
 		return
@@ -45,7 +45,7 @@ func main() {
 	lm.SetLogger(logger)
 	uiCtx := &core.UiContext{
 		Console:             console,
-		Validator:           core.InputValidator{},
+		Validator:           &core.InputValidator{},
 		ErrorHandler:        errorHandler,
 		Logger:              logger,
 		CommandRegistry:     core.NewCommandRegistry(core.NewCommandLocalizer(lm), core.NewCommandLocalizer(lm)),
@@ -121,6 +121,5 @@ func runMainLoop(appCtx *core.AppContext, uiCtx *core.UiContext, startState core
 			currentState, err = appCtx.GoToState(nextState, uiCtx)
 			uiCtx.DisplayError(err)
 		}
-		uiCtx.DisplayMessage()
 	}
 }

@@ -13,6 +13,7 @@ type BaseGameState struct {
 func (b *BaseGameState) Scope() core.Scope {
 	return core.ScopeGame
 }
+
 func (b *BaseGameState) Init(ctx *core.AppContext, ui *core.UiContext) (core.State, error) {
 	game, ok := ctx.Game.(*Game)
 	if !ok {
@@ -27,6 +28,7 @@ type StartState struct{ BaseGameState }
 func (s *StartState) Handle(ctx *core.AppContext, ui *core.UiContext, _ string) (core.State, error) {
 	return NewMainMenu(ctx, ui, s.game), nil
 }
+
 func (s *StartState) RequiresInput() bool {
 	return false
 }
@@ -65,11 +67,13 @@ type GameState struct{ BaseGameState }
 func (g *GameState) Id() string {
 	return "game"
 }
+
 func (g *GameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "score")+"\r\n", g.game.PlayerScore, g.game.BotScore))
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(g, "current_round")+"\r\n", g.game.CurrentRound, g.game.TotalRounds))
 	ui.DisplayText(ui.GetLocalizedStateMsg(g, "prompt") + "\r\n")
 }
+
 func (g *GameState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	option, err := ui.Validator.ParseInt(input)
 	if err != nil {
@@ -84,11 +88,12 @@ func (g *GameState) Handle(ctx *core.AppContext, ui *core.UiContext, input strin
 	case 3:
 		playerMove = Paper
 	default:
-		ui.Msg = ui.GetLocalizedStateMsg(g, "invalid_option") + "\r\n"
+		ui.DisplayText(ui.GetLocalizedStateMsg(g, "invalid_option") + "\r\n")
 		return g, nil
 	}
 	return g.Play(ctx, ui, playerMove)
 }
+
 func (g *GameState) Play(ctx *core.AppContext, ui *core.UiContext, playerMove Move) (core.State, error) {
 	g.game.MakePlayerMove(playerMove)
 	g.game.MakeBotMove()
@@ -113,6 +118,7 @@ type EndGameState struct{ BaseGameState }
 func (e *EndGameState) Id() string {
 	return "end_game"
 }
+
 func (e *EndGameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(e, "score")+"\r\n", e.game.PlayerScore, e.game.BotScore))
 	if e.game.CheckWin() {
@@ -123,9 +129,11 @@ func (e *EndGameState) Display(ctx *core.AppContext, ui *core.UiContext) {
 		ui.DisplayText(ui.GetLocalizedStateMsg(e, "draw") + "\r\n")
 	}
 }
+
 func (e *EndGameState) Handle(ctx *core.AppContext, ui *core.UiContext, _ string) (core.State, error) {
 	return NewMainMenu(ctx, ui, e.game), nil
 }
+
 func (e *EndGameState) RequiresInput() bool {
 	return false
 }
@@ -135,16 +143,24 @@ type SelectRoundsState struct{ BaseGameState }
 func (s *SelectRoundsState) Id() string {
 	return "select_rounds"
 }
+
 func (s *SelectRoundsState) Display(ctx *core.AppContext, ui *core.UiContext) {
 	ui.DisplayText(ui.GetLocalizedStateMsg(s, "prompt") + "\r\n")
 	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "current_value")+"\r\n", s.game.TotalRounds))
 }
+
 func (s *SelectRoundsState) Handle(ctx *core.AppContext, ui *core.UiContext, input string) (core.State, error) {
 	num, err := ui.Validator.ParseOptionalIntInRange(input, s.game.TotalRounds, s.game.MinRounds, s.game.MaxRounds)
 	if err != nil {
 		return s, err
 	}
 	s.game.TotalRounds = num
-	ui.Msg = fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", num)
+	ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", num))
 	return ctx.GetPreviousState()
+}
+
+func (s *SelectRoundsState) GetCommands() []core.Command {
+	return []core.Command{
+		&core.BackCommand{},
+	}
 }

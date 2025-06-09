@@ -19,6 +19,7 @@ func (app *AppContext) GetCurrentState() (State, error) {
 	}
 	return app.StateStack.Peek(), nil
 }
+
 func (app *AppContext) GetPreviousState() (State, error) {
 	if app.StateStack.IsEmpty() {
 		return nil, NewAppError(ErrStateStack, "state_stack_empty", nil)

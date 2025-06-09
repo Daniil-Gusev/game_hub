@@ -22,16 +22,20 @@ func NewCommandRegistry(globalLocalizer, localLocalizer *CommandLocalizer) *Comm
 		localLocalizer:  localLocalizer,
 	}
 }
+
 func (r *CommandRegistry) LoadGlobalTranslations(filePath string) error {
 	return r.globalLocalizer.LoadTranslations(filePath)
 }
+
 func (r *CommandRegistry) LoadLocalTranslations(filePath string) error {
 	return r.localLocalizer.LoadTranslations(filePath)
 }
+
 func (r *CommandRegistry) UpdateAliases() {
 	r.updateGlobalAliases()
 	r.updateLocalAliases()
 }
+
 func (r *CommandRegistry) containsCommand(cmds []Command, cmd Command) bool {
 	for _, c := range cmds {
 		if c.Id() == cmd.Id() {

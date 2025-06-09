@@ -8,8 +8,7 @@ import (
 
 type UiContext struct {
 	Console             Console
-	Msg                 string
-	Validator           InputValidator
+	Validator           *InputValidator
 	ErrorHandler        ErrorHandler
 	Logger              Logger
 	LocalizationManager *LocalizationManager
@@ -29,13 +28,6 @@ func (ui *UiContext) DisplayError(err error) {
 	msg := ui.ErrorHandler.Handle(err)
 	if msg != "" {
 		ui.DisplayText(fmt.Sprintf("%s\r\n", msg))
-	}
-}
-
-func (ui *UiContext) DisplayMessage() {
-	if ui.Msg != "" {
-		ui.DisplayText(ui.Msg)
-		ui.Msg = ""
 	}
 }
 

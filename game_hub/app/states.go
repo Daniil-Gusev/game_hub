@@ -30,6 +30,7 @@ func (s *StartState) Init(ctx *core.AppContext, ui *core.UiContext) (core.State,
 func (s *StartState) Handle(ctx *core.AppContext, ui *core.UiContext, _ string) (core.State, error) {
 	return NewMainMenu(ctx, ui), nil
 }
+
 func (s *StartState) RequiresInput() bool {
 	return false
 }
@@ -98,7 +99,7 @@ func (s *GameSelectionMenuState) Handle(ctx *core.AppContext, ui *core.UiContext
 	}
 	maxOption := len(s.AvailableGames)
 	if option < 0 || option > maxOption {
-		ui.Msg = ui.GetLocalizedStateMsg(s, "invalid_option") + "\r\n"
+		ui.DisplayText(ui.GetLocalizedStateMsg(s, "invalid_option") + "\r\n")
 		return s, nil
 	}
 	if option == 0 {
@@ -138,13 +139,14 @@ func (s *LanguageSelectionMenuState) Handle(ctx *core.AppContext, ui *core.UiCon
 				return s, err
 			}
 			ui.CommandRegistry.UpdateAliases()
-			ui.Msg = fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", lang.Name)
+			ui.DisplayText(fmt.Sprintf(ui.GetLocalizedStateMsg(s, "selected")+"\r\n", lang.Name))
 			return ctx.GetPreviousState()
 		}
 	}
-	ui.Msg = ui.GetLocalizedStateMsg(s, "invalid_input") + "\r\n"
+	ui.DisplayText(ui.GetLocalizedStateMsg(s, "invalid_input") + "\r\n")
 	return s, nil
 }
+
 func (s *LanguageSelectionMenuState) GetCommands() []core.Command {
 	return []core.Command{
 		&core.BackCommand{},
